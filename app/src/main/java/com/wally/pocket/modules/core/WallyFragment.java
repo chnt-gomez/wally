@@ -25,7 +25,12 @@ public class WallyFragment extends Fragment {
         int layoutRes = getArguments().getInt(LAYOUT_RES, -1);
         view = inflater.inflate(layoutRes, container, false);
         ButterKnife.bind(this, view);
+        init();
         return view;
+    }
+
+    protected void init(){
+
     }
 
 }
