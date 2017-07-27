@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:padding="8dp"
                 android:textColor="@color/colorDebt"
-                android:drawableStart="@drawable/ic_minus_grey600_18dp"
+                android:drawableStart="@drawable/ic_banking_spendings_18"
                 android:textAlignment="viewEnd"
                 android:text="$6,709.18"/>
 
@@ -55,8 +55,8 @@
                 android:padding="8dp"
                 android:textColor="@color/colorWhite"
                 android:textAlignment="viewEnd"
-                android:drawableTint="@color/colorAccent"
-                android:drawableStart="@drawable/ic_coin_grey600_18dp"
+                android:drawableTint="@color/colorWhite"
+                android:drawableStart="@drawable/ic_small_spendings_18dp"
                 android:text="$ 1,098.00"
                 android:id="@+id/tv_period_remaining"
                 android:background="@color/colorPrimary"/>
@@ -70,7 +70,7 @@
                 <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_plus_grey600_24dp"
+                    android:src="@drawable/ic_smiley_dolar_24dp"
                     android:tint="@color/colorAccent"
                     android:background="@color/colorWhite"
                     android:padding="8dp"/>
@@ -86,8 +86,8 @@
                 <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_minus_grey600_24dp"
-                    android:tint="@color/colorDebt"
+                    android:src="@drawable/ic_small_spendings_24dp"
+                    android:tint="@color/colorAccent"
                     android:background="@color/colorWhite"
                     android:padding="8dp"/>
 

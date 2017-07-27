@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.wally.pocket.R;
+import com.wally.pocket.modules.account.AccountFragment;
 import com.wally.pocket.modules.balance.BalanceFragment;
 
 import butterknife.BindView;
@@ -44,7 +45,10 @@ public class HomeActivity extends AppCompatActivity {
                 switch (item.getItemId()){
                     case R.id.action_balance:
                         navigateToFragment(BalanceFragment.newInstance());
-                        break;
+                        return true;
+                    case R.id.action_account:
+                        navigateToFragment(AccountFragment.newInstance());
+                        return true;
                 }
                 return false;
             }

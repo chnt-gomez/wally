@@ -6,28 +6,28 @@
 
 
     <TextView
-        android:paddingEnd="4dp"
-        android:text="TextView"
+        android:id="@+id/tv_card_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/tv_expense_concept"
-        android:layout_toStartOf="@+id/tv_expense_apply_day" />
+        android:layout_centerVertical="true"
+        android:layout_toStartOf="@+id/tv_cut_day"
+        android:paddingEnd="4dp"
+        android:text="TextView" />
 
     <TextView
+        android:id="@+id/tv_total_debt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:text="$ 127.00"
         android:layout_alignParentEnd="true"
-        android:id="@+id/tv_expense_amount" />
+        android:layout_centerVertical="true"
+        android:text="$ 127.00" />
 
     <TextView
-        android:id="@+id/tv_expense_apply_day"
+        android:id="@+id/tv_cut_day"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:text="TextView" />
 </RelativeLayout>
