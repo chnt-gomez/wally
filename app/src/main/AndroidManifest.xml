@@ -3,25 +3,43 @@
     package="com.wally.pocket">
 
     <application
-        android:allowBackup="true"
         android:name="com.orm.SugarApp"
+        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <meta-data android:name="DATABASE" android:value="wally.db" />
-        <meta-data android:name="VERSION" android:value="1" />
-        <meta-data android:name="QUERY_LOG" android:value="false" />
-        <meta-data android:name="DOMAIN_PACKAGE_NAME" android:value="com.wally.pocket" />
+        <meta-data
+            android:name="DATABASE"
+            android:value="wally.db" />
+        <meta-data
+            android:name="VERSION"
+            android:value="1" />
+        <meta-data
+            android:name="QUERY_LOG"
+            android:value="false" />
+        <meta-data
+            android:name="DOMAIN_PACKAGE_NAME"
+            android:value="com.wally.pocket" />
+
         <activity
-            android:name=".modules.home.HomeActivity"
-            android:label="@string/title_activity_home"
+            android:name=".modules.balance.BalanceActivity"
+            android:label="@string/title_activity_balance"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
-                <category android:name="android.intent.category.LAUNCHER"/>
-                <action android:name="android.intent.action.MAIN"/>
-            </intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".modules.account.AccountActivity"
+            android:label="@string/title_activity_account"
+            android:parentActivityName=".modules.balance.BalanceActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.wally.pocket.modules.balance.BalanceActivity" />
         </activity>
     </application>
 

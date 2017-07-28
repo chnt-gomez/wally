@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/action_account"
+        android:icon="@drawable/ic_wallet_grey600_18dp"
+        android:title="Account" />
+    <item android:id="@+id/action_records"
+        android:icon="@drawable/ic_file_chart_grey600_24dp"
+        android:title="Records" />
+
+</menu>

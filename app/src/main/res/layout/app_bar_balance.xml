@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context="com.wally.pocket.modules.home.DeprecatedActivity">
+    tools:context="com.wally.pocket.modules.balance.BalanceActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -21,24 +20,15 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.design.widget.BottomNavigationView
-        android:layout_width="match_parent"
-        android:id="@+id/bottomNavigationMenu"
+    <include layout="@layout/content_balance" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:itemBackground="@drawable/bottom_menu_background"
-        app:itemIconTint="@color/colorAccent"
-        app:itemTextColor="@color/colorPrimary"
-        android:layout_gravity="bottom"
-        app:menu="@menu/bottom_navigation_menu">
-
-    </android.support.design.widget.BottomNavigationView>
-
-    <FrameLayout
-        android:layout_marginTop="?android:attr/actionBarSize"
-        android:layout_marginBottom="?android:attr/actionBarSize"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/frame_container"/>
-
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:tint="@color/colorWhite"
+        app:srcCompat="@drawable/ic_small_spendings_24dp" />
 
 </android.support.design.widget.CoordinatorLayout>
