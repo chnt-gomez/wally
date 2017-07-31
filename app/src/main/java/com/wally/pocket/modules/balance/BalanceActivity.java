@@ -16,7 +16,7 @@ import android.view.MenuItem;
 import android.widget.ListView;
 
 import com.wally.pocket.R;
-import com.wally.pocket.modules.account.AccountActivity;
+import com.wally.pocket.modules.expandinc.ExpAndIncActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -118,7 +118,7 @@ public class BalanceActivity extends AppCompatActivity
 
         switch (id){
             case R.id.action_account:
-                startActivity(new Intent(BalanceActivity.this, AccountActivity.class));
+                startActivity(new Intent(BalanceActivity.this, ExpAndIncActivity.class));
                 break;
         }
 

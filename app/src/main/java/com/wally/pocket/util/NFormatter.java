@@ -19,4 +19,21 @@ public class NFormatter {
         }
     }
 
+    public static float toFloat(String s) {
+        try{
+            return Float.valueOf(s);
+        }catch (Exception e){
+            Log.e("Format error", s+" cannot be converted to float");
+            return 0.0F;
+        }
+    }
+
+    public static int toInt(String s) {
+        try{
+            return Integer.valueOf(s);
+        }catch (Exception e){
+            Log.e("Format error", s+" cannot be converted to integer");
+            return 1;
+        }
+    }
 }

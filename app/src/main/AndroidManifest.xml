@@ -33,7 +33,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".modules.account.AccountActivity"
+            android:name=".modules.expandinc.ExpAndIncActivity"
             android:label="@string/title_activity_account"
             android:parentActivityName=".modules.balance.BalanceActivity"
             android:theme="@style/AppTheme.NoActionBar">
