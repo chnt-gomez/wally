@@ -45,6 +45,12 @@ public class DialogBuilder {
 
     }
 
+    public static Dialog newQuickExpenseDialog(final Context context,
+                                               final RequiredDialogOps.NewQuickExpenseListener callback){
+        //TODO create the dialog
+        return null;
+    }
+
     public static Dialog newRegularExpense (final Context context,
                                                  final RequiredDialogOps.NewRegularExpenseListener callback){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);

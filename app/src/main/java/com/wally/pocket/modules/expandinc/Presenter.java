@@ -1,9 +1,7 @@
 package com.wally.pocket.modules.expandinc;
 
 import com.wally.pocket.model.RecurrentExpense;
-import com.wally.pocket.model.RecurrentExpenseAdapter;
 import com.wally.pocket.model.RecurrentIncome;
-import com.wally.pocket.model.RecurrentIncomeAdapter;
 
 import java.util.List;
 
@@ -19,18 +17,18 @@ class Presenter {
     private Presenter(){}
 
 
-    public static Presenter getInstance(){
+    static Presenter getInstance(){
         if (instance == null)
             instance = new Presenter();
         return instance;
     }
 
-    protected List<RecurrentExpenseAdapter> getRecurrentExpensesList(){
-        return RecurrentExpenseAdapter.fromList(RecurrentExpense.listAll(RecurrentExpense.class));
+    List<RecurrentExpense> getRecurrentExpensesList(){
+        return RecurrentExpense.listAll(RecurrentExpense.class);
     }
 
-    protected List<RecurrentIncomeAdapter> getRecurrentIncomesList(){
-        return RecurrentIncomeAdapter.fromList(RecurrentIncome.listAll(RecurrentIncome.class));
+    List<RecurrentIncome> getRecurrentIncomesList(){
+        return RecurrentIncome.listAll(RecurrentIncome.class);
     }
 
 

@@ -13,9 +13,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.wally.pocket.R;
+import com.wally.pocket.dialogs.DialogBuilder;
+import com.wally.pocket.model.RecurrentExpense;
 import com.wally.pocket.modules.expandinc.ExpAndIncActivity;
 
 import java.util.ArrayList;
@@ -42,14 +46,23 @@ public class BalanceActivity extends AppCompatActivity
     @BindView(R.id.nav_view)
     NavigationView navigationView;
 
+    @BindView(R.id.tv_expenses_total)
+    TextView tvExpensesTotal;
+
+    @BindView(R.id.tv_account_total)
+    TextView tvAccountTotal;
+
+    @BindView(R.id.tv_period_remaining)
+    TextView tvPeriodSpendinsRemaining;
+
+    private BalancePresenter presenter = BalancePresenter.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_balance);
         init();
-        expensesList.setAdapter(new PendingExpensesAdapter(getApplicationContext(), R.layout.row_pending_expense_item,
-                generateMockList()));
+
     }
 
     private void init() {
@@ -58,8 +71,7 @@ public class BalanceActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                DialogBuilder.newQuickExpenseDialog
             }
         });
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -67,15 +79,18 @@ public class BalanceActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
-    }
-
-    @Deprecated
-    List<PendingExpense> generateMockList(){
-        List<PendingExpense> mockList = new ArrayList<>(25);
-        for (int i=0; i<24; i++){
-            mockList.add(new PendingExpense("Mock concept", "$ 1,568.00"));
-        }
-        return mockList;
+        expensesList.setAdapter(new PendingExpensesAdapter(getApplicationContext(), R.layout.row_pending_expense_item,
+                presenter.getPeriodExpenses()));
+        tvExpensesTotal.setText(presenter.getPeriodTotal());
+        tvAccountTotal.setText(presenter.getAccountTotal());
+        tvPeriodSpendinsRemaining.setText(presenter.getPeriodSpendinsAvailable());
+        expensesList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                presenter.applyRecurrentExpense(id);
+                return true;
+            }
+        });
     }
 
     @Override
@@ -121,7 +136,6 @@ public class BalanceActivity extends AppCompatActivity
                 startActivity(new Intent(BalanceActivity.this, ExpAndIncActivity.class));
                 break;
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

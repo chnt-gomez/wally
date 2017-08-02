@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.wally.pocket.R;
-import com.wally.pocket.model.RecurrentIncomeAdapter;
+import com.wally.pocket.model.RecurrentIncome;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ import butterknife.ButterKnife;
  * Created by MAV1GA on 31/07/2017.
  */
 
-public class IncomesAdapter extends ArrayAdapter<RecurrentIncomeAdapter> {
+public class IncomesAdapter extends ArrayAdapter<RecurrentIncome> {
 
     @BindView(R.id.tv_income_amount)
     TextView tvIncomeAmount;
@@ -31,7 +31,7 @@ public class IncomesAdapter extends ArrayAdapter<RecurrentIncomeAdapter> {
     @BindView(R.id.tv_income_concept)
     TextView tvIncomeConcept;
 
-    public IncomesAdapter(Context context, int resource, List<RecurrentIncomeAdapter> objects) {
+    public IncomesAdapter(Context context, int resource, List<RecurrentIncome> objects) {
         super(context, resource, objects);
     }
 
@@ -41,10 +41,12 @@ public class IncomesAdapter extends ArrayAdapter<RecurrentIncomeAdapter> {
         if (convertView == null)
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_regular_income_item, null);
         ButterKnife.bind(this, convertView);
-        RecurrentIncomeAdapter item = getItem(position);
-        tvIncomeAmount.setText(item.getIncomeTotal());
-        tvIncomeApplyDay.setText(item.getApplyDay());
-        tvIncomeConcept.setText(item.getConcept());
+        RecurrentIncome item = getItem(position);
+            if (item == null)
+                item = new RecurrentIncome();
+        tvIncomeAmount.setText(item.getFormattedIncomeAmount());
+        tvIncomeApplyDay.setText(item.getFormattedApplyDay());
+        tvIncomeConcept.setText(item.getFormattedConcept());
         return convertView;
     }
 }

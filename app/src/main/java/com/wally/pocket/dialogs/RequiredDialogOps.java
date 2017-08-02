@@ -1,5 +1,6 @@
 package com.wally.pocket.dialogs;
 
+import com.wally.pocket.model.Expense;
 import com.wally.pocket.model.RecurrentExpense;
 import com.wally.pocket.model.RecurrentIncome;
 
@@ -17,4 +18,7 @@ public interface RequiredDialogOps {
         void onNewRegularExpenseListener(RecurrentExpense expense);
     }
 
+    interface NewQuickExpenseListener {
+        void onNewQuickExpenseListener (Expense expense);
+    }
 }

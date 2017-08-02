@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.wally.pocket.R;
-import com.wally.pocket.model.RecurrentExpenseAdapter;
+import com.wally.pocket.model.RecurrentExpense;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ import butterknife.ButterKnife;
  * Created by MAV1GA on 31/07/2017.
  */
 
-public class ExpensesAdapter extends ArrayAdapter<RecurrentExpenseAdapter> {
+public class ExpensesAdapter extends ArrayAdapter<RecurrentExpense> {
 
     @BindView(R.id.tv_expense_amount)
     TextView tvExpenseAmount;
@@ -31,7 +31,7 @@ public class ExpensesAdapter extends ArrayAdapter<RecurrentExpenseAdapter> {
     @BindView(R.id.tv_expense_concept)
     TextView tvExpenseConcept;
 
-    public ExpensesAdapter(Context context, int resource, List<RecurrentExpenseAdapter> objects) {
+    public ExpensesAdapter(Context context, int resource, List<RecurrentExpense> objects) {
         super(context, resource, objects);
     }
 
@@ -41,10 +41,12 @@ public class ExpensesAdapter extends ArrayAdapter<RecurrentExpenseAdapter> {
         if (convertView ==  null)
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_regular_expense_item, null);
         ButterKnife.bind(this, convertView);
-        RecurrentExpenseAdapter item = getItem(position);
-        tvExpenseAmount.setText(item.getExpenseAmount());
-        tvExpenseApplyDay.setText(item.getExpenseApplyDay());
-        tvExpenseConcept.setText(item.getExpenseConcept());
+        RecurrentExpense item = getItem(position);
+            if (item == null)
+                item = new RecurrentExpense();
+        tvExpenseAmount.setText(item.getFormattedExpenseTotal());
+        tvExpenseApplyDay.setText(item.getFormattedApplyDay());
+        tvExpenseConcept.setText(item.getFormattedExpenseConcept());
         return convertView;
 
     }

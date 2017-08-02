@@ -36,17 +36,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
+                android:id="@+id/tv_account_total"
                 android:drawableStart="@drawable/ic_cash_multiple_grey600_18dp"
-                android:textAlignment="viewEnd"
-                android:text="$12,068.23"/>
+                android:textAlignment="viewEnd"/>
             <TextView
+                android:id="@+id/tv_expenses_total"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
                 android:textColor="@color/colorDebt"
                 android:drawableStart="@drawable/ic_banking_spendings_18"
-                android:textAlignment="viewEnd"
-                android:text="$6,709.18"/>
+                android:textAlignment="viewEnd"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -57,7 +57,6 @@
                 android:textAlignment="viewEnd"
                 android:drawableTint="@color/colorWhite"
                 android:drawableStart="@drawable/ic_small_spendings_18dp"
-                android:text="$ 1,098.00"
                 android:id="@+id/tv_period_remaining"
                 android:background="@color/colorPrimary"/>
 

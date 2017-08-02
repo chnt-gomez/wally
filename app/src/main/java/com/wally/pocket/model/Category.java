@@ -7,4 +7,8 @@ import com.orm.SugarRecord;
  */
 
 public class Category extends SugarRecord {
+
+    private String categoryName;
+    private int categoryType;
+
 }

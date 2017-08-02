@@ -1,6 +1,9 @@
 package com.wally.pocket.model;
 
+import android.support.annotation.NonNull;
+
 import com.orm.SugarRecord;
+import com.wally.pocket.util.NFormatter;
 
 /**
  * Created by MAV1GA on 25/07/2017.
@@ -38,8 +41,19 @@ public class RecurrentIncome extends SugarRecord implements Comparable<Recurrent
     private String incomeConcept;
 
     @Override
-    public int compareTo(RecurrentIncome income) {
-        int compareApplyDate = income.getApplyDate();
-        return this.applyDate <= compareApplyDate ? 1 : 0;
+    public int compareTo(@NonNull RecurrentIncome income) {
+        return (this.applyDate - income.getApplyDate());
+    }
+
+    public String getFormattedIncomeAmount(){
+        return NFormatter.maskNumber(getIncomeAmount());
+    }
+
+    public String getFormattedApplyDay(){
+        return String.valueOf(getApplyDate());
+    }
+
+    public String getFormattedConcept(){
+        return getIncomeConcept() == null ? "" : getIncomeConcept();
     }
 }

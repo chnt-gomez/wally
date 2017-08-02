@@ -1,6 +1,7 @@
 package com.wally.pocket.model;
 
 import com.orm.SugarRecord;
+import com.wally.pocket.util.NFormatter;
 
 /**
  * Created by MAV1GA on 25/07/2017.
@@ -44,4 +45,17 @@ public class RecurrentExpense extends SugarRecord {
     private String expenseConcept;
     private int applyDay;
     private int applyStatus;
+
+    public String getFormattedExpenseTotal(){
+        return NFormatter.maskNumber(getExpenseTotal());
+    }
+
+    public String getFormattedExpenseConcept(){
+        return getExpenseConcept() == null ? "" : getExpenseConcept();
+    }
+
+    public String getFormattedApplyDay(){
+        return String.valueOf(getApplyDay());
+    }
+
 }
