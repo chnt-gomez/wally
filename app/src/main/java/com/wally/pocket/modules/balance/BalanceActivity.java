@@ -21,6 +21,7 @@ import com.wally.pocket.dialogs.DialogBuilder;
 import com.wally.pocket.dialogs.RequiredDialogOps;
 import com.wally.pocket.model.Expense;
 import com.wally.pocket.model.Income;
+import com.wally.pocket.modules.account.ActivityAccount;
 import com.wally.pocket.modules.expandinc.ExpAndIncActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -155,6 +156,9 @@ public class BalanceActivity extends AppCompatActivity
         switch (id){
             case R.id.action_incandexp:
                 startActivity(new Intent(BalanceActivity.this, ExpAndIncActivity.class));
+                break;
+            case R.id.action_account:
+                startActivity(new Intent(BalanceActivity.this, ActivityAccount.class));
                 break;
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
