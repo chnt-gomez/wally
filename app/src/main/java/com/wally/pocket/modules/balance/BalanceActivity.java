@@ -3,7 +3,6 @@ package com.wally.pocket.modules.balance;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,17 +13,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import com.wally.pocket.R;
 import com.wally.pocket.dialogs.DialogBuilder;
-import com.wally.pocket.model.RecurrentExpense;
+import com.wally.pocket.dialogs.RequiredDialogOps;
+import com.wally.pocket.model.Expense;
+import com.wally.pocket.model.Income;
 import com.wally.pocket.modules.expandinc.ExpAndIncActivity;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -55,6 +52,12 @@ public class BalanceActivity extends AppCompatActivity
     @BindView(R.id.tv_period_remaining)
     TextView tvPeriodSpendinsRemaining;
 
+    @BindView(R.id.btn_simley)
+    ImageButton btnSmiley;
+
+    @BindView(R.id.btn_ask)
+    ImageButton btnAsk;
+
     private BalancePresenter presenter = BalancePresenter.getInstance();
 
     @Override
@@ -71,9 +74,27 @@ public class BalanceActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DialogBuilder.newQuickExpenseDialog
+                DialogBuilder.newQuickExpenseDialog(BalanceActivity.this, new RequiredDialogOps.NewQuickExpenseListener() {
+                    @Override
+                    public void onNewQuickExpenseListener(Expense expense) {
+                        presenter.applyExpense(expense);
+                    }
+                }).show();
             }
         });
+
+         btnSmiley.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                DialogBuilder.newLuckyIncomeDialog(BalanceActivity.this, new RequiredDialogOps.NewLuckyIncomeListener() {
+                    @Override
+                    public void onNewLuckyIncome(Income income) {
+                        presenter.applyLuckyIncome(income);
+                    }
+                }).show();
+             }
+         });
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -132,7 +153,7 @@ public class BalanceActivity extends AppCompatActivity
         int id = item.getItemId();
 
         switch (id){
-            case R.id.action_account:
+            case R.id.action_incandexp:
                 startActivity(new Intent(BalanceActivity.this, ExpAndIncActivity.class));
                 break;
         }

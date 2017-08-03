@@ -7,28 +7,21 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Income concept" />
+        android:text="Expense concept" />
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
-        android:id="@+id/et_income_concept"/>
+        android:id="@+id/et_expense_concept"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Apply date:"/>
+        android:text="Amount paid"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:hint="Eg. 18"
-        android:id="@+id/et_apply_day"
-        android:inputType="number"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Ammount:"/>
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/et_income_amount"/>
+        android:hint="Eg. 1.50"
+        android:id="@+id/et_expense_amount"
+        android:inputType="numberDecimal"/>
+
 </LinearLayout>

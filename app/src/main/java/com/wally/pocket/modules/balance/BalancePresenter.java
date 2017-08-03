@@ -1,6 +1,9 @@
 package com.wally.pocket.modules.balance;
 
 import android.util.Log;
+
+import com.wally.pocket.model.Income;
+import com.wally.pocket.modules.core.WallyPresenter;
 import com.wally.pocket.model.Account;
 import com.wally.pocket.model.Expense;
 import com.wally.pocket.model.RecurrentExpense;
@@ -53,6 +56,8 @@ public class BalancePresenter {
 
     private int getPeriodStartDay(){
         final List<RecurrentIncome> incomeList = RecurrentIncome.listAll(RecurrentIncome.class);
+        if (incomeList.size() == 0)
+            return 1;
         Collections.sort(incomeList);
         int today = DateTime.now().getDayOfMonth();
         for (int i=0; i<incomeList.size(); i++){
@@ -64,6 +69,8 @@ public class BalancePresenter {
 
     private int getEndPeriodDay() {
         final List<RecurrentIncome> incomeList = RecurrentIncome.listAll(RecurrentIncome.class);
+        if (incomeList.size() == 0)
+            return 1;
         Collections.sort(incomeList);
         int today = DateTime.now().getDayOfMonth();
         for (int i=0; i<incomeList.size(); i++){
@@ -87,14 +94,33 @@ public class BalancePresenter {
     void applyRecurrentExpense(long expenseId){
         RecurrentExpense expense = RecurrentExpense.findById(RecurrentExpense.class, expenseId);
             if (expense != null) {
-                float newTotal = getAccount().getAccountTotal() - expense.getExpenseTotal();
-                getAccount().setAccountTotal(newTotal).save();
+                applyExpenseToAccount(expense.getExpenseTotal());
                 expense.setApplyStatus(1);
                 expense.save();
             }
     }
 
     private Account getAccount(){
-        return Account.listAll(Account.class).get(0);
+        return WallyPresenter.getAccount();
+    }
+
+    void applyExpense(Expense expense) {
+        applyExpenseToAccount(expense.getExpenseAmount());
+        expense.save();
+    }
+
+    private void applyExpenseToAccount(float amount){
+        float newTotal = getAccount().getAccountTotal() - amount;
+        getAccount().setAccountTotal(newTotal).save();
+    }
+
+    private void applyIncomeToAccount(float amount){
+        float newTotal = getAccount().getAccountTotal() + amount;
+        getAccount().setAccountTotal(newTotal).save();
+    }
+
+    void applyLuckyIncome(Income income) {
+        applyIncomeToAccount(income.getIncomeAmount());
+        income.save();
     }
 }

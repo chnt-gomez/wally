@@ -1,12 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/action_account"
+        android:icon="@drawable/ic_temple_24"
+        android:title="Account"/>
+    <item
+        android:id="@+id/action_incandexp"
+        android:icon="@drawable/ic_refresh_24"
+        android:title="Incomes &amp; Expenses" />
 
     <item
-        android:id="@+id/action_account"
-        android:icon="@drawable/ic_wallet_grey600_18dp"
-        android:title="Account" />
-    <item android:id="@+id/action_records"
-        android:icon="@drawable/ic_file_chart_grey600_24dp"
-        android:title="Records" />
+        android:id="@+id/action_credit_cards"
+        android:icon="@drawable/ic_credit_card_multiple_24"
+        android:title="Credit cards"/>
 
+    <item
+        android:id="@+id/action_history_records"
+        android:icon="@drawable/ic_receipt_24"
+        android:title="History"/>
 </menu>
