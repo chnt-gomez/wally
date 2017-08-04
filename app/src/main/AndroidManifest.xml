@@ -50,6 +50,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.wally.pocket.modules.balance.BalanceActivity" />
         </activity>
+        <activity
+            android:name=".modules.creditcards.CreditCardsActivity"
+            android:label="@string/title_activity_credit_cards"
+            android:parentActivityName=".modules.balance.BalanceActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.wally.pocket.modules.balance.BalanceActivity" />
+        </activity>
     </application>
 
 </manifest>
