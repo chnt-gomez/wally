@@ -9,6 +9,9 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.wally.pocket.R;
+import com.wally.pocket.dialogs.DialogBuilder;
+import com.wally.pocket.dialogs.RequiredDialogOps;
+import com.wally.pocket.model.CreditCard;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,6 +27,8 @@ public class CreditCardsActivity extends AppCompatActivity {
     @BindView(R.id.lv_cards)
     ListView lvCardList;
 
+    private CreditCardsPresenter presenter = CreditCardsPresenter.getInstance();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,10 +42,16 @@ public class CreditCardsActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                DialogBuilder.newCreditCardDialog(CreditCardsActivity.this, new RequiredDialogOps.NewCreditCardListener() {
+                    @Override
+                    public void onNewCreditCard(CreditCard card) {
+                        presenter.addCreditCard(card);
+                    }
+                }).show();
             }
         });
+        lvCardList.setAdapter(new CreditCardListAdapter(getApplicationContext(),
+                R.layout.row_credit_card_item, presenter.buildCreditCardList()));
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }

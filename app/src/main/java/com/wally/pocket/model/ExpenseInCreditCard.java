@@ -62,4 +62,5 @@ public class ExpenseInCreditCard extends SugarRecord {
     public void setExhibitPay(int exhibitPay) {
         this.exhibitPay = exhibitPay;
     }
+
 }

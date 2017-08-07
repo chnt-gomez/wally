@@ -2,6 +2,8 @@ package com.wally.pocket.modules.balance;
 
 import android.util.Log;
 
+import com.wally.pocket.model.CreditCard;
+import com.wally.pocket.model.ExpenseInCreditCard;
 import com.wally.pocket.model.Income;
 import com.wally.pocket.modules.core.WallyPresenter;
 import com.wally.pocket.model.Account;
@@ -32,13 +34,18 @@ public class BalancePresenter {
     List<RecurrentExpense> getPeriodExpenses(){
         int start = getPeriodStartDay();
         int end = getEndPeriodDay();
+
+
         Log.d(getClass().getSimpleName(), String.format("Period is this: Start: %d, End: %d", start,end));
-        if (start < end)
+        if (start < end) {
+            Log.d(getClass().getSimpleName(), "start > end");
             return RecurrentExpense.find(RecurrentExpense.class,
-                    "apply_day >= ? and apply_day < ? and apply_status = 0", String.valueOf(start), String.valueOf(end));
-        else
+                    "apply_day >= ? and apply_day < ?", String.valueOf(start), String.valueOf(end));
+        } else {
+            Log.d(getClass().getSimpleName(), "start < end");
             return RecurrentExpense.find(RecurrentExpense.class,
-                    "apply_day < ? and apply_day >= ? and apply_status = 0", String.valueOf(end), String.valueOf(start));
+                    "apply_day >= ? OR apply_day < ?", String.valueOf(start), String.valueOf(end));
+        }
     }
 
     String getPeriodTotal(){
@@ -53,7 +60,6 @@ public class BalancePresenter {
         return total;
     }
 
-
     private int getPeriodStartDay(){
         final List<RecurrentIncome> incomeList = RecurrentIncome.listAll(RecurrentIncome.class);
         if (incomeList.size() == 0)
@@ -64,7 +70,7 @@ public class BalancePresenter {
             if (incomeList.get(i).getApplyDate() <= today)
                 return incomeList.get(i).getApplyDate();
         }
-        return incomeList.get(0).getApplyDate();
+        return incomeList.get(incomeList.size()-1).getApplyDate();
     }
 
     private int getEndPeriodDay() {
@@ -106,6 +112,7 @@ public class BalancePresenter {
 
     void applyExpense(Expense expense) {
         applyExpenseToAccount(expense.getExpenseAmount());
+        expense.setExpenseStatus(0);
         expense.save();
     }
 
@@ -122,5 +129,21 @@ public class BalancePresenter {
     void applyLuckyIncome(Income income) {
         applyIncomeToAccount(income.getIncomeAmount());
         income.save();
+    }
+
+    List<CreditCard> getCreditCards() {
+        return CreditCard.listAll(CreditCard.class);
+    }
+
+    void applyChargeToCard(Expense expense, long cardId) {
+        expense.setExpenseStatus(1);
+        expense.save();
+        CreditCard card = CreditCard.findById(CreditCard.class, cardId);
+        ExpenseInCreditCard expenseInCreditCard = new ExpenseInCreditCard();
+        expenseInCreditCard.setCreditCard(card);
+        expenseInCreditCard.setExpense(expense);
+        expenseInCreditCard.setApplyDate(DateTime.now().getMillis());
+        expenseInCreditCard.setApplyStatus(1);
+        expenseInCreditCard.save();
     }
 }

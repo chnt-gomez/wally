@@ -69,6 +69,15 @@
                 <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/btn_pay_with_card"
+                    android:src="@drawable/ic_banking_debit_machine_36"
+                    android:tint="@color/colorAccent"
+                    android:background="@color/colorWhite"
+                    android:padding="8dp"/>
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:id="@+id/btn_simley"
                     android:src="@drawable/ic_smiley_dolar_36"
                     android:tint="@color/colorAccent"

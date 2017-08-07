@@ -1,5 +1,6 @@
 package com.wally.pocket.dialogs;
 
+import com.wally.pocket.model.CreditCard;
 import com.wally.pocket.model.Expense;
 import com.wally.pocket.model.Income;
 import com.wally.pocket.model.RecurrentExpense;
@@ -29,5 +30,13 @@ public interface RequiredDialogOps {
 
     interface AskForExpenseListeber{
         void onAskForExpense (Expense expense);
+    }
+
+    interface NewCreditCardListener {
+        void onNewCreditCard(CreditCard card);
+    }
+
+    interface NewCreditCardCharge {
+        void onNewChargeToCard(Expense expense, long cardId);
     }
 }

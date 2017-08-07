@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
-        android:layout_toStartOf="@+id/tv_cut_day"
+        android:layout_toStartOf="@+id/tv_pay_day"
         android:paddingEnd="4dp"
         android:text="TextView" />
 
@@ -24,7 +24,7 @@
         android:text="$ 127.00" />
 
     <TextView
-        android:id="@+id/tv_cut_day"
+        android:id="@+id/tv_pay_day"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"

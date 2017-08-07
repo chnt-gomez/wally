@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.wally.pocket.R;
 import com.wally.pocket.dialogs.DialogBuilder;
 import com.wally.pocket.dialogs.RequiredDialogOps;
+import com.wally.pocket.model.CreditCard;
 import com.wally.pocket.model.Expense;
 import com.wally.pocket.model.Income;
 import com.wally.pocket.modules.account.ActivityAccount;
@@ -60,6 +61,9 @@ public class BalanceActivity extends AppCompatActivity
     @BindView(R.id.btn_ask)
     ImageButton btnAsk;
 
+    @BindView(R.id.btn_pay_with_card)
+    ImageButton btnPayWIthCredit;
+
     private BalancePresenter presenter = BalancePresenter.getInstance();
 
     @Override
@@ -96,6 +100,18 @@ public class BalanceActivity extends AppCompatActivity
                 }).show();
              }
          });
+
+        btnPayWIthCredit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogBuilder.newChargeToCreditCard(BalanceActivity.this, new RequiredDialogOps.NewCreditCardCharge() {
+                    @Override
+                    public void onNewChargeToCard(Expense expense, long cardId) {
+                        presenter.applyChargeToCard(expense, cardId);
+                    }
+                }, presenter.getCreditCards()).show();
+            }
+        });
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);

@@ -14,6 +14,16 @@ public class Expense extends SugarRecord {
     private String expenseConcept;
     private Category expenseCategory;
 
+    public int getExpenseStatus() {
+        return expenseStatus;
+    }
+
+    public void setExpenseStatus(int expenseStatus) {
+        this.expenseStatus = expenseStatus;
+    }
+
+    private int expenseStatus;
+
     public float getExpenseAmount() {
         return expenseAmount;
     }
