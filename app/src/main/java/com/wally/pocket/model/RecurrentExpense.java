@@ -1,6 +1,7 @@
 package com.wally.pocket.model;
 
 import com.orm.SugarRecord;
+import com.orm.dsl.Ignore;
 import com.wally.pocket.util.NFormatter;
 
 /**
@@ -8,6 +9,15 @@ import com.wally.pocket.util.NFormatter;
  */
 
 public class RecurrentExpense extends SugarRecord {
+
+    @Ignore
+    public static final int APPLIED = 0;
+    @Ignore
+    public static final int PENDING = 1;
+    @Ignore
+    public static final int CANCELED = 2;
+    @Ignore
+    public static final int DELAYED = 3;
 
     public float getExpenseTotal() {
         return expenseTotal;

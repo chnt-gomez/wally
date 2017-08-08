@@ -23,6 +23,7 @@ import com.wally.pocket.model.RecurrentIncome;
 import com.wally.pocket.util.NFormatter;
 
 import org.joda.time.DateTime;
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -183,6 +184,16 @@ public class DialogBuilder {
                 callback.onNewChargeToCard(expense, id);
             }
         });
+        return builder.create();
+    }
+
+    public static Dialog newLoadingDialog(final Context context){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        final View dialogView = inflater.inflate(R.layout.dialog_loading, null);
+        builder.setView(dialogView);
+        final TextView tvTips = (TextView)dialogView.findViewById(R.id.tv_tip);
+        tvTips.setText("Cargando...");
         return builder.create();
     }
 

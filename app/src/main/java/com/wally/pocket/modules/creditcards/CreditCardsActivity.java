@@ -55,5 +55,4 @@ public class CreditCardsActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
-
 }

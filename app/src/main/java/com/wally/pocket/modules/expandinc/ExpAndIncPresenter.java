@@ -9,17 +9,17 @@ import java.util.List;
  * Created by MAV1GA on 31/07/2017.
  */
 
-class Presenter {
+class ExpAndIncPresenter {
 
 
-    private static Presenter instance;
+    private static ExpAndIncPresenter instance;
 
-    private Presenter(){}
+    private ExpAndIncPresenter(){}
 
 
-    static Presenter getInstance(){
+    static ExpAndIncPresenter getInstance(){
         if (instance == null)
-            instance = new Presenter();
+            instance = new ExpAndIncPresenter();
         return instance;
     }
 

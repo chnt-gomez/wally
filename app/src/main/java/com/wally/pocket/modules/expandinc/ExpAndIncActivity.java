@@ -126,7 +126,7 @@ public class ExpAndIncActivity extends AppCompatActivity {
         @BindView(R.id.btn_add)
         ImageButton btnAdd;
 
-        Presenter presenter = Presenter.getInstance();
+        ExpAndIncPresenter expAndIncPresenter = ExpAndIncPresenter.getInstance();
 
         protected static final int FRAGMENT_EXPENSES = 1;
         protected static final int FRAGMENT_INCOMES = 2;
@@ -162,13 +162,14 @@ public class ExpAndIncActivity extends AppCompatActivity {
             reportHeader.setText("Regular expenses");
 
             incomesLists.setAdapter(new ExpensesAdapter(
-                    getContext(), R.layout.row_regular_expense_item,presenter.getRecurrentExpensesList()));
+                    getContext(), R.layout.row_regular_expense_item, expAndIncPresenter.getRecurrentExpensesList()));
             btnAdd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     DialogBuilder.newRegularExpense(getContext(), new RequiredDialogOps.NewRegularExpenseListener() {
                         @Override
                         public void onNewRegularExpenseListener(RecurrentExpense expense) {
+                            expense.setApplyStatus(RecurrentExpense.PENDING);
                             expense.save();
                         }
                     }).show();
@@ -182,7 +183,7 @@ public class ExpAndIncActivity extends AppCompatActivity {
             cardIcon.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorAccent));
             reportHeader.setText("Regular incomes");
             incomesLists.setAdapter(new IncomesAdapter(getContext(), R.layout.row_regular_income_item,
-                    presenter.getRecurrentIncomesList()));
+                    expAndIncPresenter.getRecurrentIncomesList()));
             btnAdd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
