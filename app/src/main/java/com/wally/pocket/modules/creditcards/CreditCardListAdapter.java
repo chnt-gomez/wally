@@ -35,9 +35,9 @@ public class CreditCardListAdapter extends ArrayAdapter<CreditCard> {
         if (item == null){
             item = new CreditCard();
         }
-        tvCardName.setText(item.getFormattedCardName());
-        tvTotalDebt.setText(item.getFormattedCalculatedDebt());
-        tvPayDay.setText(item.getFormattedPayDay());
+        tvCardName.setText(item.getCreditCardName());
+        tvTotalDebt.setText(item.getTotalDebtString());
+        tvPayDay.setText(String.valueOf(item.getPayDay()));
         return convertView;
 
     }

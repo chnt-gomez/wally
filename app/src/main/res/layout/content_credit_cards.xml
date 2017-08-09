@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/content_credit_cards"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -13,10 +14,16 @@
     tools:context="com.wally.pocket.modules.creditcards.CreditCardsActivity"
     tools:showIn="@layout/activity_credit_cards">
 
-    <ListView
+    <Spinner
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/lv_cards">
-    </ListView>
+        android:layout_height="wrap_content"
+        android:id="@+id/spn_cards">
+    </Spinner>
 
-</RelativeLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_card_name"/>
+
+
+</LinearLayout>

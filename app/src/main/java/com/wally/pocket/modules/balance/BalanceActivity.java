@@ -3,7 +3,6 @@ package com.wally.pocket.modules.balance;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -11,31 +10,25 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.wally.pocket.R;
-import com.wally.pocket.dialogs.DialogBuilder;
-import com.wally.pocket.dialogs.RequiredDialogOps;
-import com.wally.pocket.model.Expense;
 import com.wally.pocket.modules.account.ActivityAccount;
 import com.wally.pocket.modules.core.DataLoader;
 import com.wally.pocket.modules.core.WallyActivity;
 import com.wally.pocket.modules.creditcards.CreditCardsActivity;
 import com.wally.pocket.modules.expandinc.ExpAndIncActivity;
 import butterknife.BindView;
-import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class BalanceActivity extends WallyActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     @BindView(R.id.lv_expenses_list)
     ListView expensesList;
-
-    @BindView(R.id.fab)
-    FloatingActionButton fab;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -53,11 +46,16 @@ public class BalanceActivity extends WallyActivity
     TextView tvAccountTotal;
 
     @BindView(R.id.tv_period_remaining)
-    TextView tvPeriodSpendinsRemaining;
-
+    TextView tvPeriodSpendsRemaining;
 
     @BindView(R.id.tv_credit_cards_debt)
     TextView tvCreditCardsDebt;
+
+    @BindView(R.id.btn_debt_machine)
+    ImageButton btnDebtMachine;
+
+    @BindView (R.id.btn_pay_with_cash)
+    ImageButton btnPayWithCash;
 
     private BalancePresenter presenter = BalancePresenter.getInstance(this);
     private ViewAdapter viewAdapter;
@@ -74,24 +72,17 @@ public class BalanceActivity extends WallyActivity
 
         super.init();
         setSupportActionBar(toolbar);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DialogBuilder.newQuickExpenseDialog(BalanceActivity.this, new RequiredDialogOps.NewQuickExpenseListener() {
-                    @Override
-                    public void onNewQuickExpenseListener(Expense expense) {
-                        presenter.applyExpense(expense);
-                    }
-                }).show();
-            }
-        });
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
+        btnDebtMachine.setOnClickListener(this);
+        btnPayWithCash.setOnClickListener(this);
+
         start();
+
 
         expensesList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -137,7 +128,7 @@ public class BalanceActivity extends WallyActivity
             tvExpensesTotal.setText(viewAdapter.getPeriodTotal());
             tvAccountTotal.setText(viewAdapter.getAccountTotal());
             tvCreditCardsDebt.setText(viewAdapter.getCreditCardsDebt());
-            tvPeriodSpendinsRemaining.setText(viewAdapter.getPeriodSpendsAvailable());
+            tvPeriodSpendsRemaining.setText(viewAdapter.getPeriodSpendsAvailable());
         }
         super.onLoadingDone();
     }
@@ -177,6 +168,17 @@ public class BalanceActivity extends WallyActivity
     @Override
     public void onReload() {
         start();
+    }
+
+    @Override
+    public void onClick(View view) {
+        final int id = view.getId();
+        if (id == R.id.btn_debt_machine){
+            //
+        }
+        if (id == R.id.btn_pay_with_cash){
+            //
+        }
     }
 
     class ViewAdapter{

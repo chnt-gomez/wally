@@ -1,7 +1,6 @@
 package com.wally.pocket.model;
 
 import com.orm.SugarRecord;
-import com.orm.dsl.Ignore;
 import com.wally.pocket.util.NFormatter;
 
 /**
@@ -12,32 +11,16 @@ public class CreditCard extends SugarRecord {
 
     private String creditCardName;
     private float creditLimit;
+    private float totalDebt;
+    private float currentDebt;
+    private float interestRate;
     private int payDay;
     private int cutDay;
 
-    public float getCalculatedDebt() {
-        return calculatedDebt;
-    }
 
-    public void setCalculatedDebt(float calculatedDebt) {
-        this.calculatedDebt = calculatedDebt;
-    }
-
-    @Ignore
-    private float calculatedDebt;
-
-    public int getCutDay() {
-        return cutDay;
-    }
-
-    public void setCutDay(int cutDay) {
-        this.cutDay = cutDay;
-    }
-
-    private float interestRate;
 
     public String getCreditCardName() {
-        return creditCardName;
+        return creditCardName != null ? creditCardName : "";
     }
 
     public void setCreditCardName(String creditCardName) {
@@ -48,8 +31,48 @@ public class CreditCard extends SugarRecord {
         return creditLimit;
     }
 
+    public String getCreditLimitString(){
+        return NFormatter.maskMoney(creditLimit);
+    }
+
     public void setCreditLimit(float creditLimit) {
         this.creditLimit = creditLimit;
+    }
+
+    public float getTotalDebt() {
+        return totalDebt;
+    }
+
+    public String getTotalDebtString(){
+        return NFormatter.maskMoney(totalDebt);
+    }
+
+    public void setTotalDebt(float totalDebt) {
+        this.totalDebt = totalDebt;
+    }
+
+    public float getCurrentDebt() {
+        return currentDebt;
+    }
+
+    public String getCurrentDebtString(){
+        return NFormatter.maskMoney(currentDebt);
+    }
+
+    public void setCurrentDebt(float currentDebt) {
+        this.currentDebt = currentDebt;
+    }
+
+    public float getInterestRate() {
+        return interestRate;
+    }
+
+    public String getInterestRateString(){
+        return NFormatter.maskNumber(interestRate);
+    }
+
+    public void setInterestRate(float interestRate) {
+        this.interestRate = interestRate;
     }
 
     public int getPayDay() {
@@ -60,27 +83,17 @@ public class CreditCard extends SugarRecord {
         this.payDay = payDay;
     }
 
-    public float getInterestRate() {
-        return interestRate;
+    public int getCutDay() {
+        return cutDay;
     }
 
-    public void setInterestRate(float interestRate) {
-        this.interestRate = interestRate;
+    public void setCutDay(int cutDay) {
+        this.cutDay = cutDay;
     }
 
-    public String getFormattedCardName(){
-        return creditCardName != null ? creditCardName : "";
-    }
 
-    public String getFormattedCalculatedDebt(){
-        return NFormatter.maskNumber(getCalculatedDebt());
-    }
 
-    public String getFormattedCutDay(){
-        return String.valueOf(getCutDay());
-    }
 
-    public String getFormattedPayDay(){
-        return String.valueOf(getPayDay());
-    }
+
+
 }

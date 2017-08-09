@@ -207,14 +207,14 @@ public class DialogBuilder {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             TextView label = new TextView(getContext());
-            label.setText(getItem(position).getFormattedCardName());
+            label.setText(getItem(position).getCreditCardName());
             return label;
         }
 
         @Override
         public View getDropDownView(int position, View convertView, ViewGroup parent) {
             TextView label = new TextView(getContext());
-            label.setText(getItem(position).getFormattedCardName());
+            label.setText(getItem(position).getCreditCardName());
             return label;
         }
     }

@@ -19,6 +19,15 @@ public class NFormatter {
         }
     }
 
+    public static String maskMoney(float f){
+        try{
+            return String.format(Locale.getDefault(), "$ %.2f", f);
+        }catch(Exception e){
+            Log.e("Format error", f+" cannot be formatted to String format: #.##");
+            return String.valueOf(f);
+        }
+    }
+
     public static float toFloat(String s) {
         try{
             return Float.valueOf(s);

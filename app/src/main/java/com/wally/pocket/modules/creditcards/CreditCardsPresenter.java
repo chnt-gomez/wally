@@ -22,28 +22,9 @@ public class CreditCardsPresenter {
     private CreditCardsPresenter(){}
 
     List<CreditCard> buildCreditCardList(){
-        List<CreditCard> list = CreditCard.listAll(CreditCard.class);
-        for (CreditCard c : list){
-            c.setCalculatedDebt(calculateDebt(c.getId()));
-        }
-        return list;
+        return CreditCard.listAll(CreditCard.class);
     }
 
-    private float calculateDebt(long cardId){
-        float total = 0.0F;
-        final List<ExpenseInCreditCard> expenseInCreditCard = ExpenseInCreditCard.findWithQuery(
-                ExpenseInCreditCard.class,
-                "SELECT * FROM Expense, Credit_Card, Expense_In_Credit_Card WHERE " +
-                        "Expense.Id = Expense_In_Credit_Card.Id and " +
-                        "Credit_Card.Id = Expense_In_Credit_Card.Id and " +
-                        "Credit_Card.Id = ? and Expense.expense_Status = 1",
-                String.valueOf(cardId)
-        );
-        for (ExpenseInCreditCard e : expenseInCreditCard){
-            total += e.getExpense().getExpenseAmount();
-        }
-        return total;
-    }
 
     private static String formatForQuery(String rawQuery){
         return rawQuery.replace(" ", "%");

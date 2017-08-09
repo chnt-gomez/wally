@@ -152,7 +152,7 @@ class BalancePresenter {
     }
 
     void applyChargeToCard(Expense expense, long cardId) {
-        expense.setExpenseStatus(1);
+        expense.setExpenseStatus(0);
         expense.save();
         CreditCard card = CreditCard.findById(CreditCard.class, cardId);
         ExpenseInCreditCard expenseInCreditCard = new ExpenseInCreditCard();
@@ -161,30 +161,14 @@ class BalancePresenter {
         expenseInCreditCard.setApplyDate(DateTime.now().getMillis());
         expenseInCreditCard.setApplyStatus(RecurrentExpense.PENDING);
         expenseInCreditCard.save();
+
         callback.onReload();
     }
 
     float getCreditCardsDebt() {
         float total = 0F;
-        for (CreditCard c : getCreditCardsInPeriod()) {
-            total += getPeriodDebtFromCard(c.getId());
-        }
-        return total;
-
-    }
-
-    private float getPeriodDebtFromCard(long cardId){
-        float total = 0.0F;
-        final List<ExpenseInCreditCard> expenseInCreditCard = ExpenseInCreditCard.findWithQuery(
-                ExpenseInCreditCard.class,
-                "SELECT * FROM Expense, Credit_Card, Expense_In_Credit_Card WHERE " +
-                        "Expense.Id = Expense_In_Credit_Card.Id and " +
-                        "Credit_Card.Id = Expense_In_Credit_Card.Id and " +
-                        "Credit_Card.Id = ? and Expense.expense_Status = 1",
-                String.valueOf(cardId)
-        );
-        for (ExpenseInCreditCard e : expenseInCreditCard){
-            total += e.getExpense().getExpenseAmount();
+        for (CreditCard c : getCreditCardsInPeriod()){
+            total += c.getTotalDebt();
         }
         return total;
     }
