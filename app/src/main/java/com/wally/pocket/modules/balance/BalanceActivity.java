@@ -2,8 +2,6 @@ package com.wally.pocket.modules.balance;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,11 +16,12 @@ import android.widget.TextView;
 import com.wally.pocket.R;
 import com.wally.pocket.modules.account.ActivityAccount;
 import com.wally.pocket.modules.core.DataLoader;
+import com.wally.pocket.modules.core.RequiredPresenterOps;
 import com.wally.pocket.modules.core.WallyActivity;
+import com.wally.pocket.modules.core.WallyPresenter;
 import com.wally.pocket.modules.creditcards.CreditCardsActivity;
 import com.wally.pocket.modules.expandinc.ExpAndIncActivity;
 import butterknife.BindView;
-import butterknife.OnClick;
 
 public class BalanceActivity extends WallyActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
@@ -51,14 +50,14 @@ public class BalanceActivity extends WallyActivity
     @BindView(R.id.tv_credit_cards_debt)
     TextView tvCreditCardsDebt;
 
-    @BindView(R.id.btn_debt_machine)
-    ImageButton btnDebtMachine;
-
     @BindView (R.id.btn_pay_with_cash)
     ImageButton btnPayWithCash;
 
-    private BalancePresenter presenter = BalancePresenter.getInstance(this);
+    @BindView(android.R.id.empty)
+    TextView tvEmpty;
+
     private ViewAdapter viewAdapter;
+    private RequiredPresenterOps.RequiredBalancePresenterOps presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,10 +77,11 @@ public class BalanceActivity extends WallyActivity
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
-        btnDebtMachine.setOnClickListener(this);
         btnPayWithCash.setOnClickListener(this);
-
+        initCoordinatorLayout(R.id.lyt_coordinator_layout);
+        expensesList.setEmptyView(tvEmpty);
         start();
+
 
 
         expensesList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -94,38 +94,37 @@ public class BalanceActivity extends WallyActivity
     }
 
     @Override
+    public void setPresenter() {
+        presenter = WallyPresenter.getInstance(this);
+    }
+
+    @Override
     protected void start() {
         DataLoader loader = new DataLoader(this);
         loader.execute();
     }
 
     @Override
-    protected void setCoordinatorLayout() {
-        try {
-            coordinatorLayout = (CoordinatorLayout)findViewById(R.id.lyt_coordinator_layout);
-        }catch (Exception e){
-            Log.e(getClass().getSimpleName(), "Coordinator layout was not found!!!");
-        }
-    }
-
-    @Override
     public void onLoading() {
         super.onLoading();
         viewAdapter = new ViewAdapter();
-        viewAdapter.setAdapter(new PendingExpensesAdapter(getApplicationContext(), R.layout.row_pending_expense_item,
+        viewAdapter.setAdapter(new PendingExpensesAdapter(getApplicationContext(),
+                R.layout.row_pending_expense_item,
                 presenter.getPeriodExpenses()));
-        viewAdapter.setPeriodTotal(presenter.getPeriodTotal());
+        viewAdapter.setPendingExpensesTotal(presenter.getPendingExpensesTotal());
         viewAdapter.setAccountTotal(presenter.getAccountTotal());
-        viewAdapter.setCreditCardsDebt(presenter.getFormattedCreditCardsDebt());
-        viewAdapter.setPeriodSpendsAvailable(presenter.getPeriodSpendsAvailable());
+        viewAdapter.setCreditCardsDebt(presenter.getCreditCardsDebt());
+        viewAdapter.setPeriodSpendsAvailable(presenter.getPeriodAvailable());
     }
+
+
 
     @Override
     public void onLoadingDone() {
 
         if (viewAdapter != null) {
             expensesList.setAdapter(viewAdapter.getAdapter());
-            tvExpensesTotal.setText(viewAdapter.getPeriodTotal());
+            tvExpensesTotal.setText(viewAdapter.getpendingExpensesTotal());
             tvAccountTotal.setText(viewAdapter.getAccountTotal());
             tvCreditCardsDebt.setText(viewAdapter.getCreditCardsDebt());
             tvPeriodSpendsRemaining.setText(viewAdapter.getPeriodSpendsAvailable());
@@ -173,55 +172,52 @@ public class BalanceActivity extends WallyActivity
     @Override
     public void onClick(View view) {
         final int id = view.getId();
-        if (id == R.id.btn_debt_machine){
-            //
-        }
         if (id == R.id.btn_pay_with_cash){
             //
         }
     }
 
     class ViewAdapter{
-        private String periodTotal, accountTotal, creditCardsDebt, periodSpendsAvailable;
+        private String pendingExpensesTotal, accountTotal, creditCardsDebt, periodSpendsAvailable;
         private PendingExpensesAdapter adapter;
 
-        public String getPeriodTotal() {
-            return periodTotal;
+         String getpendingExpensesTotal() {
+            return pendingExpensesTotal;
         }
 
-        public void setPeriodTotal(String periodTotal) {
-            this.periodTotal = periodTotal;
+         void setPendingExpensesTotal(String pendingExpensesTotal) {
+            this.pendingExpensesTotal = pendingExpensesTotal;
         }
 
-        public String getAccountTotal() {
+        String getAccountTotal() {
             return accountTotal;
         }
 
-        public void setAccountTotal(String accountTotal) {
+        void setAccountTotal(String accountTotal) {
             this.accountTotal = accountTotal;
         }
 
-        public String getCreditCardsDebt() {
+        String getCreditCardsDebt() {
             return creditCardsDebt;
         }
 
-        public void setCreditCardsDebt(String creditCardsDebt) {
+        void setCreditCardsDebt(String creditCardsDebt) {
             this.creditCardsDebt = creditCardsDebt;
         }
 
-        public String getPeriodSpendsAvailable() {
+        String getPeriodSpendsAvailable() {
             return periodSpendsAvailable;
         }
 
-        public void setPeriodSpendsAvailable(String periodSpendsAvailable) {
+        void setPeriodSpendsAvailable(String periodSpendsAvailable) {
             this.periodSpendsAvailable = periodSpendsAvailable;
         }
 
-        public PendingExpensesAdapter getAdapter() {
+        PendingExpensesAdapter getAdapter() {
             return adapter;
         }
 
-        public void setAdapter(PendingExpensesAdapter adapter) {
+        void setAdapter(PendingExpensesAdapter adapter) {
             this.adapter = adapter;
         }
     }

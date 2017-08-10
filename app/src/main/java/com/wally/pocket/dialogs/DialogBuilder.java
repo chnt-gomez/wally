@@ -123,7 +123,7 @@ public class DialogBuilder {
                         RecurrentExpense expense = new RecurrentExpense();
                         expense.setExpenseConcept(incomeConcept.getText().toString());
                         expense.setExpenseTotal(NFormatter.toFloat(incomeAmount.getText().toString()));
-                        expense.setApplyDay(NFormatter.toInt(incomeApplyDay.getText().toString()));
+                        //expense.setApplyDay(NFormatter.toInt(incomeApplyDay.getText().toString()));
                         callback.onNewRegularExpenseListener(expense);
                     }
                 });

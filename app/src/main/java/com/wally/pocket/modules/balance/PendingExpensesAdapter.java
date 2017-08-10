@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.wally.pocket.R;
 import com.wally.pocket.model.RecurrentExpense;
+import com.wally.pocket.util.NFormatter;
 
 import org.w3c.dom.Text;
 
@@ -44,8 +45,8 @@ public class PendingExpensesAdapter extends ArrayAdapter<RecurrentExpense> {
         RecurrentExpense item = getItem(position);
         if (item == null)
             item = new RecurrentExpense();
-        final String expenseName = item.getFormattedExpenseConcept();
-        final String expenseTotal = item.getFormattedExpenseTotal();
+        final String expenseName = item.getExpenseConcept();
+        final String expenseTotal = NFormatter.maskMoney(item.getExpenseTotal());
         expenseConcept.setText(expenseName);
         expenseAmount.setText(expenseTotal);
         return convertView;

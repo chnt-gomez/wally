@@ -17,8 +17,6 @@ public class CreditCard extends SugarRecord {
     private int payDay;
     private int cutDay;
 
-
-
     public String getCreditCardName() {
         return creditCardName != null ? creditCardName : "";
     }
@@ -31,9 +29,7 @@ public class CreditCard extends SugarRecord {
         return creditLimit;
     }
 
-    public String getCreditLimitString(){
-        return NFormatter.maskMoney(creditLimit);
-    }
+    public String getCreditLimitString(){return NFormatter.maskMoney(creditLimit);}
 
     public void setCreditLimit(float creditLimit) {
         this.creditLimit = creditLimit;

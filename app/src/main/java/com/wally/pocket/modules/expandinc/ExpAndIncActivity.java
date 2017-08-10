@@ -1,8 +1,9 @@
 package com.wally.pocket.modules.expandinc;
 
+import android.content.Context;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,21 +13,24 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
+
 import com.wally.pocket.R;
 import com.wally.pocket.dialogs.DialogBuilder;
 import com.wally.pocket.dialogs.RequiredDialogOps;
 import com.wally.pocket.model.RecurrentExpense;
 import com.wally.pocket.model.RecurrentIncome;
+import com.wally.pocket.modules.core.RequiredPresenterOps;
+import com.wally.pocket.modules.core.WallyActivity;
 import com.wally.pocket.modules.core.WallyFragment;
+import com.wally.pocket.modules.core.WallyPresenter;
+
+import java.util.List;
+
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
-public class ExpAndIncActivity extends AppCompatActivity {
-
+public class ExpAndIncActivity extends WallyActivity implements FragmentInteractionListener{
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
     @BindView(R.id.tabs)
@@ -38,21 +42,58 @@ public class ExpAndIncActivity extends AppCompatActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
+    @BindView(R.id.fab)
+    FloatingActionButton btnAdd;
+
+    private RequiredPresenterOps.RequiredExpAndIncOps presenter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_incandex);
         init();
-
     }
 
-    private void init(){
-        ButterKnife.bind(this);
+    @Override
+    protected void init(){
+        super.init();
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mSectionsPagerAdapter);
         tabLayout.setupWithViewPager(mViewPager);
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mViewPager.getCurrentItem() == 0){
+                    DialogBuilder.newRegularIncomeDialog(ExpAndIncActivity.this,
+                            new RequiredDialogOps.NewRegularIncomeListener() {
+                        @Override
+                        public void onNewRegularIncomeListener(RecurrentIncome income) {
+
+                        }
+                    }).show();
+                } if(mViewPager.getCurrentItem() == 1){
+                    DialogBuilder.newRegularExpense(ExpAndIncActivity.this,
+                            new RequiredDialogOps.NewRegularExpenseListener() {
+                                @Override
+                                public void onNewRegularExpenseListener(RecurrentExpense expense) {
+                                    presenter.addNewRegularExpense(expense);
+                                }
+                            }).show();
+                }
+            }
+        });
+    }
+
+    @Override
+    public void setPresenter() {
+        presenter = WallyPresenter.getInstance(this);
+    }
+
+    @Override
+    protected void start() {
+
     }
 
 
@@ -78,9 +119,19 @@ public class ExpAndIncActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public List<RecurrentIncome> getIncomes() {
+        return presenter.getRecurrentIncomes();
+    }
+
+    @Override
+    public List<RecurrentExpense> getExpenses() {
+        return presenter.getRecurrentExpenses();
+    }
+
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-        public SectionsPagerAdapter(FragmentManager fm) {
+        SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
@@ -120,13 +171,7 @@ public class ExpAndIncActivity extends AppCompatActivity {
         @BindView(R.id.img_card_icon)
         ImageView cardIcon;
 
-        @BindView(R.id.tv_report_header)
-        TextView reportHeader;
-
-        @BindView(R.id.btn_add)
-        ImageButton btnAdd;
-
-        ExpAndIncPresenter expAndIncPresenter = ExpAndIncPresenter.getInstance();
+        private FragmentInteractionListener presenter;
 
         protected static final int FRAGMENT_EXPENSES = 1;
         protected static final int FRAGMENT_INCOMES = 2;
@@ -134,11 +179,23 @@ public class ExpAndIncActivity extends AppCompatActivity {
         public static ExpAndIncomeFragment newInstance(FragmentType type) {
 
             Bundle args = new Bundle();
-            args.putInt(LAYOUT_RES, R.layout.fragment_account);
+            args.putInt(LAYOUT_RES, R.layout.fragment_incomes_and_expenses);
             args.putInt(FRAGMENT_TYPE, type == FragmentType.EXPENSES ? 1 : 2);
             ExpAndIncomeFragment fragment = new ExpAndIncomeFragment();
             fragment.setArguments(args);
             return fragment;
+        }
+
+        @Override
+        public void onAttach(Context context) {
+            super.onAttach(context);
+            this.presenter = (FragmentInteractionListener)context;
+        }
+
+        @Override
+        public void onDetach() {
+            this.presenter = null;
+            super.onDetach();
         }
 
         @Override
@@ -159,42 +216,21 @@ public class ExpAndIncActivity extends AppCompatActivity {
         private void initAsExpenses() {
             cardIcon.setImageResource(R.drawable.ic_banking_spendings_big);
             cardIcon.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorAccentSecondary));
-            reportHeader.setText("Regular expenses");
 
             incomesLists.setAdapter(new ExpensesAdapter(
-                    getContext(), R.layout.row_regular_expense_item, expAndIncPresenter.getRecurrentExpensesList()));
-            btnAdd.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    DialogBuilder.newRegularExpense(getContext(), new RequiredDialogOps.NewRegularExpenseListener() {
-                        @Override
-                        public void onNewRegularExpenseListener(RecurrentExpense expense) {
-                            expense.setApplyStatus(RecurrentExpense.PENDING);
-                            expense.save();
-                        }
-                    }).show();
-                }
-            });
+                    getContext(), R.layout.row_regular_expense_item, presenter.getExpenses()));
 
         }
 
         private void initAsIncomes(){
             cardIcon.setImageResource(R.drawable.ic_bank_note_big);
             cardIcon.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorAccent));
-            reportHeader.setText("Regular incomes");
             incomesLists.setAdapter(new IncomesAdapter(getContext(), R.layout.row_regular_income_item,
-                    expAndIncPresenter.getRecurrentIncomesList()));
-            btnAdd.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    DialogBuilder.newRegularIncomeDialog(getContext(), new RequiredDialogOps.NewRegularIncomeListener() {
-                        @Override
-                        public void onNewRegularIncomeListener(RecurrentIncome income) {
-                            income.save();
-                        }
-                    }).show();
-                }
-            });
+                    presenter.getIncomes()));
         }
     }
+
+
 }
+
+

@@ -18,17 +18,20 @@ import butterknife.ButterKnife;
 public abstract class WallyActivity extends AppCompatActivity implements LoadingDataListener, RequiredViewOps {
 
     protected CoordinatorLayout coordinatorLayout;
-
     protected Dialog loadingDialog;
 
     protected void init(){
         ButterKnife.bind(this);
-        setCoordinatorLayout();
+        setPresenter();
     }
+
+    public abstract void setPresenter();
 
     protected abstract void start();
 
-    protected abstract void setCoordinatorLayout();
+    protected void initCoordinatorLayout(int coordinatorLayoutId){
+        coordinatorLayout = (CoordinatorLayout) findViewById(coordinatorLayoutId);
+    }
 
     @Override
     public void startLoading() {

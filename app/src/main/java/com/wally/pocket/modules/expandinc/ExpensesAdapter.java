@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.wally.pocket.R;
 import com.wally.pocket.model.RecurrentExpense;
+import com.wally.pocket.util.NFormatter;
 
 import java.util.List;
 
@@ -44,9 +45,9 @@ public class ExpensesAdapter extends ArrayAdapter<RecurrentExpense> {
         RecurrentExpense item = getItem(position);
             if (item == null)
                 item = new RecurrentExpense();
-        tvExpenseAmount.setText(item.getFormattedExpenseTotal());
-        tvExpenseApplyDay.setText(item.getFormattedApplyDay());
-        tvExpenseConcept.setText(item.getFormattedExpenseConcept());
+        tvExpenseAmount.setText(NFormatter.maskMoney(item.getExpenseTotal()));
+        //tvExpenseApplyDay.setText(item.getFormattedApplyDay());
+        tvExpenseConcept.setText(item.getExpenseConcept());
         return convertView;
 
     }

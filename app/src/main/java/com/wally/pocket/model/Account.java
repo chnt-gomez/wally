@@ -1,6 +1,7 @@
 package com.wally.pocket.model;
 
 import com.orm.SugarRecord;
+import com.orm.dsl.Ignore;
 import com.wally.pocket.util.NFormatter;
 
 /**
@@ -8,6 +9,19 @@ import com.wally.pocket.util.NFormatter;
  */
 
 public class Account extends SugarRecord {
+
+    private float accountTotal;
+
+
+
+    private int accountPeriodHandling;
+
+    @Ignore
+    public static final int TYPE_FREELANCER = 0;
+    @Ignore
+    public static final int TYPE_TWO_WEEKS = 1;
+    @Ignore
+    public static final int TYPE_MONTHLY = 2;
 
     public float getAccountTotal() {
         return accountTotal;
@@ -18,9 +32,12 @@ public class Account extends SugarRecord {
         return this;
     }
 
-    private float accountTotal;
-
-    public String getFormattedAccountTotal(){
-        return NFormatter.maskNumber(getAccountTotal());
+    public int getAccountPeriodHandling() {
+        return accountPeriodHandling;
     }
+
+    public void setAccountPeriodHandling (int accountPeriodHandling) {
+        this.accountPeriodHandling = accountPeriodHandling;
+    }
+
 }

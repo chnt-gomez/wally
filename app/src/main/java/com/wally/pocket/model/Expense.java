@@ -23,6 +23,35 @@ public class Expense extends SugarRecord {
     private long expenseApplyDate;
     private String expenseConcept;
     private Category expenseCategory;
+    private int expenseStatus;
+    private float lat;
+    private float len;
+
+    public String getZipCode() {
+        return zipCode;
+    }
+
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
+    }
+
+    public float getLen() {
+        return len;
+    }
+
+    public void setLen(float len) {
+        this.len = len;
+    }
+
+    public float getLat() {
+        return lat;
+    }
+
+    public void setLat(float lat) {
+        this.lat = lat;
+    }
+
+    private String zipCode;
 
     public int getExpenseStatus() {
         return expenseStatus;
@@ -31,8 +60,6 @@ public class Expense extends SugarRecord {
     public void setExpenseStatus(int expenseStatus) {
         this.expenseStatus = expenseStatus;
     }
-
-    private int expenseStatus;
 
     public float getExpenseAmount() {
         return expenseAmount;

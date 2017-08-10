@@ -14,7 +14,7 @@ import butterknife.ButterKnife;
  * Created by MAV1GA on 26/07/2017.
  */
 
-public class WallyFragment extends Fragment {
+public abstract class WallyFragment extends Fragment {
 
     protected View view;
     protected final static String LAYOUT_RES = "layout_res";

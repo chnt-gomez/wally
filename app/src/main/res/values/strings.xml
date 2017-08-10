@@ -14,4 +14,9 @@
     <string name="add_charge">Add charge</string>
     <string name="success">Success</string>
     <string name="error">Error</string>
+    <string name="pending_expenses">Pending spends</string>
+    <string name="account_balance">Account balance</string>
+    <string name="empty_expenses_list">Congrats! You don\'t have other pending expenses this month.</string>
+    <string name="total_in_account">Total in account</string>
+    <string name="empty_regular_incomes">You don\'t have any recurrent incomes. Add your income to help Wally to calculate better your balance.</string>
 </resources>
