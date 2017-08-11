@@ -1,6 +1,8 @@
 package com.wally.pocket.modules.core;
 
 import com.wally.pocket.model.Account;
+import com.wally.pocket.model.CreditCard;
+import com.wally.pocket.model.Expense;
 import com.wally.pocket.model.RecurrentExpense;
 import com.wally.pocket.model.RecurrentIncome;
 
@@ -21,6 +23,9 @@ public interface RequiredPresenterOps {
         String getCreditCardsDebt();
         String getPeriodAvailable();
         String getPendingExpensesTotal();
+        List<CreditCard> getCreditCardsToPay();
+        void applyExpenseToCreditCard(Expense expense, long cardId);
+        void applyExpenseToAccount(Expense expense);
     }
 
     interface RequiredExpAndIncOps {

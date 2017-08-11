@@ -10,8 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.wally.pocket.R;
@@ -83,23 +85,52 @@ public class DialogBuilder {
     }
 
     public static Dialog newQuickExpenseDialog(final Context context,
-                                               final RequiredDialogOps.NewQuickExpenseListener callback){
+                                               final RequiredDialogOps.NewQuickExpenseListener callback,
+                                               final List<CreditCard> availableCards){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         LayoutInflater inflater = LayoutInflater.from(context);
-
         final View dialogView = inflater.inflate(R.layout.dialog_new_quick_expense, null);
+        final CreditCardAdapter adapter = new CreditCardAdapter(context, android.R.layout.simple_spinner_item,
+                availableCards);
         final EditText etExpenseConcept = (EditText)dialogView.findViewById(R.id.et_expense_concept);
         final EditText etExpenseAmount = (EditText)dialogView.findViewById(R.id.et_expense_amount);
+        final Spinner spnCards = (Spinner)dialogView.findViewById(R.id.spn_cards);
+        final Switch swPayWithCard = (Switch)dialogView.findViewById(R.id.sw_credit_card);
+        spnCards.setEnabled(false);
+        if (availableCards.size() >= 1){
+            swPayWithCard.setEnabled(true);
+            swPayWithCard.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked){
+                        spnCards.setEnabled(true);
+                    }else{
+                        spnCards.setEnabled(false);
+                    }
+                }
+            });
+        }
+        spnCards.setAdapter(adapter);
         builder.setView(dialogView).
                 setTitle("Quick expense").
                 setPositiveButton("Apply", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Expense expense = new Expense();
-                        expense.setExpenseConcept(etExpenseConcept.getText().toString());
-                        expense.setExpenseAmount(NFormatter.toFloat(etExpenseAmount.getText().toString()));
-                        expense.setExpenseApplyDate(DateTime.now().getMillis());
-                        callback.onNewQuickExpenseListener(expense);
+                        if (swPayWithCard.isChecked()){
+                            Expense expense = new Expense();
+                            expense.setExpenseConcept(etExpenseConcept.getText().toString());
+                            expense.setExpenseAmount(NFormatter.toFloat(etExpenseAmount.getText().toString()));
+                            expense.setExpenseApplyDate(DateTime.now().getMillis());
+                            callback.onNewQuickExpenseListener(expense, true,
+                                    ((CreditCard)spnCards.getSelectedItem()).getId());
+                        }else{
+                            Expense expense = new Expense();
+                            expense.setExpenseConcept(etExpenseConcept.getText().toString());
+                            expense.setExpenseAmount(NFormatter.toFloat(etExpenseAmount.getText().toString()));
+                            expense.setExpenseApplyDate(DateTime.now().getMillis());
+                            callback.onNewQuickExpenseListener(expense, false, -1);
+                        }
+
                     }
                 });
         return builder.create();
@@ -123,7 +154,7 @@ public class DialogBuilder {
                         RecurrentExpense expense = new RecurrentExpense();
                         expense.setExpenseConcept(incomeConcept.getText().toString());
                         expense.setExpenseTotal(NFormatter.toFloat(incomeAmount.getText().toString()));
-                        //expense.setApplyDay(NFormatter.toInt(incomeApplyDay.getText().toString()));
+                        expense.setApplyDay(NFormatter.toInt(incomeApplyDay.getText().toString()));
                         callback.onNewRegularExpenseListener(expense);
                     }
                 });

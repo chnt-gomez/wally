@@ -3,6 +3,7 @@ package com.wally.pocket.modules.core;
 import com.wally.pocket.model.Account;
 import com.wally.pocket.model.CreditCard;
 import com.wally.pocket.model.Expense;
+import com.wally.pocket.model.ExpenseInCreditCard;
 import com.wally.pocket.model.RecurrentExpense;
 import com.wally.pocket.model.RecurrentIncome;
 import com.wally.pocket.util.NFormatter;
@@ -47,27 +48,12 @@ public class WallyPresenter implements RequiredPresenterOps.RequiredBalancePrese
      */
 
     private void applyExpense(Expense e){
-        float accountTotal = getAccount().getAccountTotal();
-        getAccount().setAccountTotal(accountTotal - e.getExpenseAmount()).save();
-        e.setExpenseApplyDate(DateTime.now().getMillis());
-        e.setExpenseStatus(Expense.APPLIED);
         e.save();
     }
 
     private void applyRecurrentExpense(RecurrentExpense e){
         e.setApplyStatus(RecurrentExpense.APPLIED);
         e.save();
-    }
-
-    private List<CreditCard> getCreditCards(){
-        return CreditCard.listAll(CreditCard.class);
-    }
-
-    private List<RecurrentExpense> getPendingRecurrentExpenses(){
-        return RecurrentExpense.find(RecurrentExpense.class,
-                "apply_status = ? OR apply_status = ?",
-                String.valueOf(RecurrentExpense.PENDING),
-                String.valueOf(RecurrentExpense.DELAYED));
     }
 
     private float getPendingRecurrentExpensesTotal(){
@@ -81,9 +67,13 @@ public class WallyPresenter implements RequiredPresenterOps.RequiredBalancePrese
     private float getCreditCardsDebtTotal(){
         float total = 0F;
         for (CreditCard c : getCreditCards()){
-            total += c.getCurrentDebt();
+            total += c.getTotalDebt();
         }
         return total;
+    }
+
+    private List<CreditCard> getCreditCards(){
+        return CreditCard.listAll(CreditCard.class);
     }
 
 
@@ -91,9 +81,41 @@ public class WallyPresenter implements RequiredPresenterOps.RequiredBalancePrese
         this.view = view;
     }
 
+
+    /*
+    Balance Operations
+     */
     @Override
     public String getPendingExpensesTotal() {
         return NFormatter.maskMoney(getPendingRecurrentExpensesTotal());
+    }
+
+    @Override
+    public void applyExpenseToCreditCard(Expense expense, long cardId) {
+        CreditCard creditCard = CreditCard.findById(CreditCard.class, cardId);
+
+        expense.setExpenseApplyDate(DateTime.now().getMillis());
+        expense.setExpenseStatus(Expense.APPLIED);
+        expense.save();
+        ExpenseInCreditCard ex = new ExpenseInCreditCard();
+        ex.setApplyStatus(ExpenseInCreditCard.PENDING);
+        ex.setExpense(expense);
+        ex.setCreditCard(creditCard);
+        ex.save();
+        float creditCardDebt = creditCard.getTotalDebt();
+        creditCard.setTotalDebt(creditCardDebt + expense.getExpenseAmount());
+        creditCard.save();
+        view.onOperationSuccess();
+    }
+
+    @Override
+    public void applyExpenseToAccount(Expense e) {
+        float accountTotal = getAccount().getAccountTotal();
+        getAccount().setAccountTotal(accountTotal - e.getExpenseAmount()).save();
+        e.setExpenseApplyDate(DateTime.now().getMillis());
+        e.setExpenseStatus(Expense.APPLIED);
+        e.save();
+        view.onOperationSuccess();
     }
 
     @Override
@@ -104,7 +126,7 @@ public class WallyPresenter implements RequiredPresenterOps.RequiredBalancePrese
             Expense e = new Expense();
             e.setExpenseConcept(expense.getExpenseConcept());
             e.setExpenseAmount(expense.getExpenseTotal());
-            applyExpense(e);
+            applyExpenseToAccount(e);
         }
 
         view.onOperationSuccess();
@@ -114,8 +136,6 @@ public class WallyPresenter implements RequiredPresenterOps.RequiredBalancePrese
     public List<RecurrentExpense> getPeriodExpenses() {
         return getPendingRecurrentExpenses();
     }
-
-
 
     @Override
     public String getAccountTotal() {
@@ -137,13 +157,25 @@ public class WallyPresenter implements RequiredPresenterOps.RequiredBalancePrese
         return NFormatter.maskMoney(total);
     }
 
+    @Override
+    public List<CreditCard> getCreditCardsToPay(){
+        return CreditCard.listAll(CreditCard.class);
+    }
+
+    private List<RecurrentExpense> getPendingRecurrentExpenses(){
+        return RecurrentExpense.find(RecurrentExpense.class,
+                "apply_status = ? OR apply_status = ?",
+                String.valueOf(RecurrentExpense.PENDING),
+                String.valueOf(RecurrentExpense.DELAYED));
+    }
+
     /*
     IndAndExp Operations
      */
 
     @Override
     public void addNewRegularExpense(RecurrentExpense expense) {
-        if (DateTime.now().getMillis() <= expense.getApplyDay()){
+        if (DateTime.now().getDayOfMonth() <= expense.getApplyDay()){
             expense.setApplyStatus(RecurrentExpense.PENDING);
         }else{
             expense.setApplyStatus(RecurrentExpense.APPLIED);

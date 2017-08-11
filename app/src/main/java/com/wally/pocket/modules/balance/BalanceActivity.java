@@ -2,6 +2,7 @@ package com.wally.pocket.modules.balance;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -10,10 +11,12 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.AdapterView;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.wally.pocket.R;
+import com.wally.pocket.dialogs.DialogBuilder;
+import com.wally.pocket.dialogs.RequiredDialogOps;
+import com.wally.pocket.model.Expense;
 import com.wally.pocket.modules.account.ActivityAccount;
 import com.wally.pocket.modules.core.DataLoader;
 import com.wally.pocket.modules.core.RequiredPresenterOps;
@@ -50,11 +53,11 @@ public class BalanceActivity extends WallyActivity
     @BindView(R.id.tv_credit_cards_debt)
     TextView tvCreditCardsDebt;
 
-    @BindView (R.id.btn_pay_with_cash)
-    ImageButton btnPayWithCash;
-
     @BindView(android.R.id.empty)
     TextView tvEmpty;
+
+    @BindView(R.id.fab)
+    FloatingActionButton btnPay;
 
     private ViewAdapter viewAdapter;
     private RequiredPresenterOps.RequiredBalancePresenterOps presenter;
@@ -77,12 +80,11 @@ public class BalanceActivity extends WallyActivity
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
-        btnPayWithCash.setOnClickListener(this);
         initCoordinatorLayout(R.id.lyt_coordinator_layout);
         expensesList.setEmptyView(tvEmpty);
         start();
 
-
+        btnPay.setOnClickListener(this);
 
         expensesList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -106,6 +108,7 @@ public class BalanceActivity extends WallyActivity
 
     @Override
     public void onLoading() {
+
         super.onLoading();
         viewAdapter = new ViewAdapter();
         viewAdapter.setAdapter(new PendingExpensesAdapter(getApplicationContext(),
@@ -115,9 +118,8 @@ public class BalanceActivity extends WallyActivity
         viewAdapter.setAccountTotal(presenter.getAccountTotal());
         viewAdapter.setCreditCardsDebt(presenter.getCreditCardsDebt());
         viewAdapter.setPeriodSpendsAvailable(presenter.getPeriodAvailable());
+
     }
-
-
 
     @Override
     public void onLoadingDone() {
@@ -172,9 +174,22 @@ public class BalanceActivity extends WallyActivity
     @Override
     public void onClick(View view) {
         final int id = view.getId();
-        if (id == R.id.btn_pay_with_cash){
-            //
+        if (id == R.id.fab){
+            DialogBuilder.newQuickExpenseDialog(BalanceActivity.this, new RequiredDialogOps.NewQuickExpenseListener(){
+                @Override
+                public void onNewQuickExpenseListener(Expense expense, boolean payWithCard, long cardId) {
+                    if (payWithCard)
+                        presenter.applyExpenseToCreditCard(expense, cardId);
+                    else
+                        presenter.applyExpenseToAccount(expense);
+                }
+            }, presenter.getCreditCardsToPay()).show();
         }
+    }
+
+    @Override
+    public void onOperationSuccess() {
+        onReload();
     }
 
     class ViewAdapter{

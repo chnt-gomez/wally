@@ -1,5 +1,7 @@
 package com.wally.pocket.dialogs;
 
+import android.support.annotation.Nullable;
+
 import com.wally.pocket.model.CreditCard;
 import com.wally.pocket.model.Expense;
 import com.wally.pocket.model.Income;
@@ -21,7 +23,7 @@ public interface RequiredDialogOps {
     }
 
     interface NewQuickExpenseListener {
-        void onNewQuickExpenseListener (Expense expense);
+        void onNewQuickExpenseListener (Expense expense, boolean addToCard, long cardId);
     }
 
     interface NewLuckyIncomeListener {
