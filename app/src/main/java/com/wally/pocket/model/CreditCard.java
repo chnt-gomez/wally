@@ -13,9 +13,19 @@ public class CreditCard extends SugarRecord {
     private float creditLimit;
     private float totalDebt;
     private float currentDebt;
+    private float pendingDebt;
     private float interestRate;
     private int payDay;
     private int cutDay;
+
+    public float getPendingDebt() {
+        return pendingDebt;
+    }
+
+    public void setPendingDebt(float pendingDebt) {
+        this.pendingDebt = pendingDebt;
+    }
+
 
     public String getCreditCardName() {
         return creditCardName != null ? creditCardName : "";

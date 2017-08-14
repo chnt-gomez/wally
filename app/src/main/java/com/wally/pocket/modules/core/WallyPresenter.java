@@ -10,6 +10,7 @@ import com.wally.pocket.util.NFormatter;
 
 import org.joda.time.DateTime;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -98,12 +99,35 @@ public class WallyPresenter implements RequiredPresenterOps.RequiredBalancePrese
         expense.setExpenseStatus(Expense.APPLIED);
         expense.save();
         ExpenseInCreditCard ex = new ExpenseInCreditCard();
-        ex.setApplyStatus(ExpenseInCreditCard.PENDING);
+        ex.setApplyStatus(ExpenseInCreditCard.APPLIED);
         ex.setExpense(expense);
         ex.setCreditCard(creditCard);
         ex.save();
+
+
+
         float creditCardDebt = creditCard.getTotalDebt();
         creditCard.setTotalDebt(creditCardDebt + expense.getExpenseAmount());
+        int cutDay = creditCard.getCutDay();
+        int payDay = creditCard.getPayDay();
+        int today = DateTime.now().getDayOfMonth();
+
+        if (cutDay < payDay){
+            if (today < cutDay){
+                creditCard.setCurrentDebt(creditCard.getCurrentDebt() + expense.getExpenseAmount());
+            }
+            if (today >= cutDay && today < payDay){
+                creditCard.setPendingDebt(creditCard.getPendingDebt() + expense.getExpenseAmount());
+            }
+            if (today >= payDay){
+                creditCard.setCurrentDebt(creditCard.getCurrentDebt() + expense.getExpenseAmount());
+            }
+        }else{
+            if (today < cutDay && today >= payDay){
+                creditCard.setCurrentDebt(creditCard.getCurrentDebt() + expense.getExpenseAmount());
+            }
+        }
+
         creditCard.save();
         view.onOperationSuccess();
     }
