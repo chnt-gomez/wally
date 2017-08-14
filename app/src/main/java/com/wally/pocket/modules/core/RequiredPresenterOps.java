@@ -35,4 +35,12 @@ public interface RequiredPresenterOps {
         List<RecurrentIncome> getRecurrentIncomes();
         List<RecurrentExpense> getRecurrentExpenses();
     }
+
+    interface RequiredCreditCardPresenterOps {
+        List<CreditCard> getAllCreditCards();
+        CreditCard getCreditCard(long cardId);
+        void updateCreditCard(long creditCardId, CreditCard creditCard);
+        void addCreditCard(CreditCard card);
+        void updateCreditCards();
+    }
 }

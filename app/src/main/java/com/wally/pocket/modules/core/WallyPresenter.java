@@ -18,7 +18,7 @@ import java.util.List;
  */
 
 public class WallyPresenter implements RequiredPresenterOps.RequiredBalancePresenterOps,
-        RequiredPresenterOps.RequiredExpAndIncOps{
+        RequiredPresenterOps.RequiredExpAndIncOps, RequiredPresenterOps.RequiredCreditCardPresenterOps{
 
     private static WallyPresenter instance;
     private RequiredViewOps view;
@@ -68,7 +68,7 @@ public class WallyPresenter implements RequiredPresenterOps.RequiredBalancePrese
     private float getCreditCardsDebtTotal(){
         float total = 0F;
         for (CreditCard c : getCreditCards()){
-            total += c.getTotalDebt();
+            total += c.getCurrentDebt();
         }
         return total;
     }
@@ -125,6 +125,12 @@ public class WallyPresenter implements RequiredPresenterOps.RequiredBalancePrese
         }else{
             if (today < cutDay && today >= payDay){
                 creditCard.setCurrentDebt(creditCard.getCurrentDebt() + expense.getExpenseAmount());
+            }
+            if (today > cutDay){
+                creditCard.setPendingDebt(creditCard.getPendingDebt() + expense.getExpenseAmount());
+            }
+            if (today > payDay){
+                creditCard.setPendingDebt(creditCard.getPendingDebt() + expense.getExpenseAmount());
             }
         }
 
@@ -207,6 +213,8 @@ public class WallyPresenter implements RequiredPresenterOps.RequiredBalancePrese
         expense.save();
     }
 
+
+
     @Override
     public void addNewRegularIncome(RecurrentIncome income) {
         income.save();
@@ -220,5 +228,36 @@ public class WallyPresenter implements RequiredPresenterOps.RequiredBalancePrese
     @Override
     public List<RecurrentExpense> getRecurrentExpenses() {
         return RecurrentExpense.listAll(RecurrentExpense.class);
+    }
+
+       /*
+    Credit Card methods
+     */
+
+    @Override
+    public List<CreditCard> getAllCreditCards() {
+        return CreditCard.listAll(CreditCard.class);
+    }
+
+    @Override
+    public CreditCard getCreditCard(long cardId) {
+        return CreditCard.findById(CreditCard.class, cardId);
+    }
+
+    @Override
+    public void updateCreditCard(long creditCardId, CreditCard creditCard) {
+        creditCard.save();
+        view.onOperationSuccess();
+    }
+
+    @Override
+    public void addCreditCard(CreditCard card) {
+        card.save();
+        view.onOperationSuccess();
+    }
+
+    @Override
+    public void updateCreditCards() {
+
     }
 }

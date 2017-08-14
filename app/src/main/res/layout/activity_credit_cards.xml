@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:id="@+id/lyt_coordinator_layout"
     tools:context="com.wally.pocket.modules.creditcards.CreditCardsActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -30,6 +31,6 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         android:tint="@android:color/white"
-        app:srcCompat="@drawable/ic_credit_card_plus_24" />
+        app:srcCompat="@drawable/ic_floppy" />
 
 </android.support.design.widget.CoordinatorLayout>
