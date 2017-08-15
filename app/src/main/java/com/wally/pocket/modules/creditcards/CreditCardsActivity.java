@@ -4,8 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,10 +13,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import com.wally.pocket.R;
 import com.wally.pocket.dialogs.DialogBuilder;
 import com.wally.pocket.dialogs.RequiredDialogOps;
@@ -29,10 +25,8 @@ import com.wally.pocket.modules.core.WallyActivity;
 import com.wally.pocket.modules.core.WallyPresenter;
 
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class CreditCardsActivity extends WallyActivity {
 
@@ -156,9 +150,11 @@ public class CreditCardsActivity extends WallyActivity {
 
     private void loadCard(int position) {
         CreditCard card = (CreditCard) spnCardList.getSelectedItem();
-        etCreditCardName.setText(card.getCreditCardName());
-        etCutDay.setText(String.valueOf(card.getCutDay()));
-        etPayDay.setText(String.valueOf(card.getPayDay()));
+        if (card != null) {
+            etCreditCardName.setText(card.getCreditCardName());
+            etCutDay.setText(String.valueOf(card.getCutDay()));
+            etPayDay.setText(String.valueOf(card.getPayDay()));
+        }
     }
 
     private static class CreditCardAdapter extends ArrayAdapter<CreditCard> {

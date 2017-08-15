@@ -12,20 +12,8 @@ public class CreditCard extends SugarRecord {
     private String creditCardName;
     private float creditLimit;
     private float totalDebt;
-    private float currentDebt;
-    private float pendingDebt;
-    private float interestRate;
     private int payDay;
     private int cutDay;
-
-    public float getPendingDebt() {
-        return pendingDebt;
-    }
-
-    public void setPendingDebt(float pendingDebt) {
-        this.pendingDebt = pendingDebt;
-    }
-
 
     public String getCreditCardName() {
         return creditCardName != null ? creditCardName : "";
@@ -57,30 +45,6 @@ public class CreditCard extends SugarRecord {
         this.totalDebt = totalDebt;
     }
 
-    public float getCurrentDebt() {
-        return currentDebt;
-    }
-
-    public String getCurrentDebtString(){
-        return NFormatter.maskMoney(currentDebt);
-    }
-
-    public void setCurrentDebt(float currentDebt) {
-        this.currentDebt = currentDebt;
-    }
-
-    public float getInterestRate() {
-        return interestRate;
-    }
-
-    public String getInterestRateString(){
-        return NFormatter.maskNumber(interestRate);
-    }
-
-    public void setInterestRate(float interestRate) {
-        this.interestRate = interestRate;
-    }
-
     public int getPayDay() {
         return payDay;
     }
@@ -96,10 +60,5 @@ public class CreditCard extends SugarRecord {
     public void setCutDay(int cutDay) {
         this.cutDay = cutDay;
     }
-
-
-
-
-
 
 }

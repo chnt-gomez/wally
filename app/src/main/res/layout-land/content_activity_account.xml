@@ -37,23 +37,21 @@
             custom:donut_text=".72 c"
             custom:donut_progress="30"
             android:layout_alignParentTop="true"
-            android:layout_marginEnd="16dp"
             android:layout_alignParentEnd="true" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_gravity="center_vertical"
             android:drawablePadding="4dp"
+
             android:padding="8dp"
-            android:id="@+id/tv_coeficient"
             android:text="@string/spending_coeficient"
             android:layout_height="wrap_content"
             android:drawableStart="@drawable/ic_small_spendings_18dp"
             android:layout_centerVertical="true"
             android:layout_alignParentStart="true" />
-
     </RelativeLayout>
-
+    
 
 
 </LinearLayout>

@@ -23,4 +23,5 @@
     <string name="apply_time">Apply</string>
     <string name="amount">Amount</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="spending_coeficient">Spending coeficient</string>
 </resources>

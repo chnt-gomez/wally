@@ -11,9 +11,6 @@ import com.wally.pocket.util.NFormatter;
 public class Account extends SugarRecord {
 
     private float accountTotal;
-
-
-
     private int accountPeriodHandling;
 
     @Ignore

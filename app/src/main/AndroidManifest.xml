@@ -14,7 +14,7 @@
             android:value="wally.db" />
         <meta-data
             android:name="VERSION"
-            android:value="7" />
+            android:value="8" />
         <meta-data
             android:name="QUERY_LOG"
             android:value="false" />
@@ -59,10 +59,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.wally.pocket.modules.balance.BalanceActivity" />
         </activity>
-        <activity
-            android:name=".modules.account.MainActivity"
-            android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

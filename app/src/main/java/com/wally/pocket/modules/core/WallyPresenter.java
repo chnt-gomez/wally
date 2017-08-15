@@ -10,7 +10,6 @@ import com.wally.pocket.util.NFormatter;
 
 import org.joda.time.DateTime;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -54,6 +53,7 @@ public class WallyPresenter implements RequiredPresenterOps.RequiredBalancePrese
 
     private void applyRecurrentExpense(RecurrentExpense e){
         e.setApplyStatus(RecurrentExpense.APPLIED);
+        e.setLatestMonthApply(DateTime.now().getMonthOfYear());
         e.save();
     }
 
@@ -68,7 +68,7 @@ public class WallyPresenter implements RequiredPresenterOps.RequiredBalancePrese
     private float getCreditCardsDebtTotal(){
         float total = 0F;
         for (CreditCard c : getCreditCards()){
-            total += c.getCurrentDebt();
+            total += c.getTotalDebt();
         }
         return total;
     }
@@ -103,36 +103,8 @@ public class WallyPresenter implements RequiredPresenterOps.RequiredBalancePrese
         ex.setExpense(expense);
         ex.setCreditCard(creditCard);
         ex.save();
-
-
-
         float creditCardDebt = creditCard.getTotalDebt();
         creditCard.setTotalDebt(creditCardDebt + expense.getExpenseAmount());
-        int cutDay = creditCard.getCutDay();
-        int payDay = creditCard.getPayDay();
-        int today = DateTime.now().getDayOfMonth();
-
-        if (cutDay < payDay){
-            if (today < cutDay){
-                creditCard.setCurrentDebt(creditCard.getCurrentDebt() + expense.getExpenseAmount());
-            }
-            if (today >= cutDay && today < payDay){
-                creditCard.setPendingDebt(creditCard.getPendingDebt() + expense.getExpenseAmount());
-            }
-            if (today >= payDay){
-                creditCard.setCurrentDebt(creditCard.getCurrentDebt() + expense.getExpenseAmount());
-            }
-        }else{
-            if (today < cutDay && today >= payDay){
-                creditCard.setCurrentDebt(creditCard.getCurrentDebt() + expense.getExpenseAmount());
-            }
-            if (today > cutDay){
-                creditCard.setPendingDebt(creditCard.getPendingDebt() + expense.getExpenseAmount());
-            }
-            if (today > payDay){
-                creditCard.setPendingDebt(creditCard.getPendingDebt() + expense.getExpenseAmount());
-            }
-        }
 
         creditCard.save();
         view.onOperationSuccess();
@@ -182,8 +154,7 @@ public class WallyPresenter implements RequiredPresenterOps.RequiredBalancePrese
     public String getPeriodAvailable() {
         float total = getAccount().getAccountTotal();
         float recurrentExpenses = getPendingRecurrentExpensesTotal();
-        float creditCardsDebt = getCreditCardsDebtTotal();
-        total = (total - recurrentExpenses - creditCardsDebt);
+        total = (total - recurrentExpenses);
         return NFormatter.maskMoney(total);
     }
 
@@ -193,6 +164,17 @@ public class WallyPresenter implements RequiredPresenterOps.RequiredBalancePrese
     }
 
     private List<RecurrentExpense> getPendingRecurrentExpenses(){
+
+        for (RecurrentExpense e : RecurrentExpense.listAll(RecurrentExpense.class)){
+            if (e.getLatestMonthApply() != DateTime.now().getMonthOfYear()){
+                int status = e.getApplyStatus();
+                if (status == RecurrentExpense.APPLIED) {
+                    e.setApplyStatus(RecurrentExpense.PENDING);
+                    e.save();
+                }
+            }
+        }
+
         return RecurrentExpense.find(RecurrentExpense.class,
                 "apply_status = ? OR apply_status = ?",
                 String.valueOf(RecurrentExpense.PENDING),

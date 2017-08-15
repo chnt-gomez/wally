@@ -8,13 +8,30 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.wally.pocket.R;
+import com.wally.pocket.modules.core.WallyActivity;
 
-public class ActivityAccount extends AppCompatActivity {
+public class ActivityAccount extends WallyActivity  {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
+        init();
+    }
+
+    @Override
+    public void setPresenter() {
+
+    }
+
+    @Override
+    protected void start() {
+
+    }
+
+    @Override
+    protected void init() {
+        super.init();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -28,5 +45,4 @@ public class ActivityAccount extends AppCompatActivity {
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
-
 }

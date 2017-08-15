@@ -24,6 +24,16 @@ public class RecurrentExpense extends SugarRecord {
     private int applyDay;
     private int applyStatus;
 
+    public int getLatestMonthApply() {
+        return latestMonthApply;
+    }
+
+    public void setLatestMonthApply(int latestMonthApply) {
+        this.latestMonthApply = latestMonthApply;
+    }
+
+    private int latestMonthApply;
+
     public float getExpenseTotal() {
         return expenseTotal;
     }
