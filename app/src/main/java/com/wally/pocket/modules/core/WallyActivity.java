@@ -115,4 +115,5 @@ public abstract class WallyActivity extends AppCompatActivity implements Loading
     public void onReload() {
 
     }
+
 }

@@ -1,11 +1,14 @@
 package com.wally.pocket.modules.core;
 
+import android.content.Context;
+
 import com.wally.pocket.model.Account;
 import com.wally.pocket.model.CreditCard;
 import com.wally.pocket.model.Expense;
 import com.wally.pocket.model.ExpenseInCreditCard;
 import com.wally.pocket.model.RecurrentExpense;
 import com.wally.pocket.model.RecurrentIncome;
+import com.wally.pocket.util.BuildNotificationIntent;
 import com.wally.pocket.util.NFormatter;
 
 import org.joda.time.DateTime;
@@ -29,6 +32,40 @@ public class WallyPresenter implements RequiredPresenterOps.RequiredBalancePrese
             instance = new WallyPresenter();
         instance.setView(view);
         return instance;
+    }
+
+    public static void updateDay(BuildNotificationIntent callback, Context context){
+        //First lets take care of the credit Cards
+        int today = DateTime.now().getDayOfMonth();
+
+        for (CreditCard c: CreditCard.listAll(CreditCard.class)){
+            switch (c.getPayStatus()){
+                case CreditCard.NOTIFIED:
+                    if (c.getPayDay() > today){
+                        c.setPayStatus(CreditCard.DELAYED);
+                        c.save();
+                        callback.onCardPayDelayed(c, context);
+                        break;
+                    }
+                    if (c.getPayDay() == today){
+                        callback.onCardPayDay(c, context);
+                        break;
+                    }
+                    callback.onCardReadyToPay(c, context);
+                    break;
+                case CreditCard.READY:
+                    if (c.getCutDay() >= today){
+                        c.setPayStatus(CreditCard.NOTIFIED);
+                        c.save();
+                        callback.onCardReadyToPay(c, context);
+                    }
+                    break;
+                case CreditCard.DELAYED:
+                    callback.onCardPayDelayed(c, context);
+                    break;
+            }
+        }
+
     }
 
     @Override
@@ -235,8 +272,9 @@ public class WallyPresenter implements RequiredPresenterOps.RequiredBalancePrese
     @Override
     public void addCreditCard(CreditCard card) {
         card.save();
-        view.onOperationSuccess();
+        ((RequiredViewOps.RequiredCardViewOps)view).onNewCardAdded(card);
     }
+
 
     @Override
     public void updateCreditCards() {

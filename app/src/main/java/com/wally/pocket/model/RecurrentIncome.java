@@ -3,6 +3,7 @@ package com.wally.pocket.model;
 import android.support.annotation.NonNull;
 
 import com.orm.SugarRecord;
+import com.orm.dsl.Ignore;
 import com.wally.pocket.util.NFormatter;
 
 /**
@@ -11,8 +12,18 @@ import com.wally.pocket.util.NFormatter;
 
 public class RecurrentIncome extends SugarRecord implements Comparable<RecurrentIncome>{
 
+    @Ignore
+    public static final int APPLIED = 0;
+
+    @Ignore
+    public static final int APPLIYING = 1;
+
+    @Ignore
+    public static final int READY = 3;
+
     private int applyDate;
     private float incomeAmount;
+    private int applyStatus;
 
     public String getIncomeConcept() {
         return incomeConcept;
@@ -55,5 +66,13 @@ public class RecurrentIncome extends SugarRecord implements Comparable<Recurrent
 
     public String getFormattedConcept(){
         return getIncomeConcept() == null ? "" : getIncomeConcept();
+    }
+
+    public int getApplyStatus() {
+        return applyStatus;
+    }
+
+    public void setApplyStatus(int applyStatus) {
+        this.applyStatus = applyStatus;
     }
 }

@@ -1,6 +1,7 @@
 package com.wally.pocket.model;
 
 import com.orm.SugarRecord;
+import com.orm.dsl.Ignore;
 import com.wally.pocket.util.NFormatter;
 
 /**
@@ -9,11 +10,33 @@ import com.wally.pocket.util.NFormatter;
 
 public class CreditCard extends SugarRecord {
 
+    @Ignore
+    public static final int NOTIFIED = 0;
+
+    @Ignore
+    public static final int READY = 1;
+
+    @Ignore
+    public static final int DELAYED = 2;
+
+    @Ignore
+    public static final int PAID = 3;
+
     private String creditCardName;
     private float creditLimit;
     private float totalDebt;
     private int payDay;
     private int cutDay;
+
+    public int getPayStatus() {
+        return payStatus;
+    }
+
+    public void setPayStatus(int payStatus) {
+        this.payStatus = payStatus;
+    }
+
+    private int payStatus;
 
     public String getCreditCardName() {
         return creditCardName != null ? creditCardName : "";

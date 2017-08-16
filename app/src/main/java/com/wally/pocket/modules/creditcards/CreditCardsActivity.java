@@ -1,6 +1,9 @@
 package com.wally.pocket.modules.creditcards;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -21,14 +24,19 @@ import com.wally.pocket.dialogs.RequiredDialogOps;
 import com.wally.pocket.model.CreditCard;
 import com.wally.pocket.modules.core.DataLoader;
 import com.wally.pocket.modules.core.RequiredPresenterOps;
+import com.wally.pocket.modules.core.RequiredViewOps;
 import com.wally.pocket.modules.core.WallyActivity;
 import com.wally.pocket.modules.core.WallyPresenter;
+import com.wally.pocket.util.AlarmReceiver;
 
+import org.joda.time.DateTime;
+
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
 
-public class CreditCardsActivity extends WallyActivity {
+public class CreditCardsActivity extends WallyActivity implements RequiredViewOps.RequiredCardViewOps{
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -157,6 +165,20 @@ public class CreditCardsActivity extends WallyActivity {
         }
     }
 
+    @Override
+    public void onNewCardAdded(CreditCard creditCard) {
+        showMessage("Added card");
+        Intent intent = new Intent(getApplicationContext(), AlarmReceiver.class);
+        intent.setAction(AlarmReceiver.UPDATE);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),
+                0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager alarm = (AlarmManager)getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+        alarm.cancel(pendingIntent);
+        DateTime morningTime = new DateTime();
+        morningTime.withTime(9, 0, 0, 0);
+        alarm.setRepeating(AlarmManager.RTC_WAKEUP, morningTime.getMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+    }
+
     private static class CreditCardAdapter extends ArrayAdapter<CreditCard> {
 
         public CreditCardAdapter(Context context, int resource, List<CreditCard> objects) {
@@ -188,8 +210,6 @@ public class CreditCardsActivity extends WallyActivity {
 
 
     }
-
-
 
     class ViewAdapter {
         private List<CreditCard> cardList;
