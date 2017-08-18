@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -28,10 +29,7 @@ import com.wally.pocket.modules.core.RequiredViewOps;
 import com.wally.pocket.modules.core.WallyActivity;
 import com.wally.pocket.modules.core.WallyPresenter;
 import com.wally.pocket.util.AlarmReceiver;
-
 import org.joda.time.DateTime;
-
-import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -140,7 +138,7 @@ public class CreditCardsActivity extends WallyActivity implements RequiredViewOp
     public void onLoadingDone() {
         super.onLoadingDone();
         final CreditCardAdapter adapter = new CreditCardAdapter(getApplicationContext()
-                , android.R.layout.simple_spinner_item, viewAdapter.getCardList());
+                , R.layout.spn_spinner_item, viewAdapter.getCardList());
         spnCardList.setAdapter(adapter);
         loadCard(0);
         spnCardList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -188,7 +186,11 @@ public class CreditCardsActivity extends WallyActivity implements RequiredViewOp
         @NonNull
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            TextView label = new TextView(getContext());
+            if (convertView == null){
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.spn_spinner_item,
+                        null);
+            }
+            TextView label = (TextView)convertView.findViewById(R.id.spn_item);
             label.setText(getItem(position).getCreditCardName());
             return label;
         }

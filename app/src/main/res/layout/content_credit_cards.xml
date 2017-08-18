@@ -20,6 +20,14 @@
         android:id="@+id/spn_cards">
     </Spinner>
 
+    <com.wally.pocket.widgets.Label
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:label_position="center"
+        app:drawable="@drawable/ic_cash_multiple_grey600_18dp"
+        app:display_text="Test" />
+
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -29,11 +37,13 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:weightSum="2">
+
         <EditText
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:id="@+id/et_cut_day"/>
+
         <EditText
             android:layout_width="0dp"
             android:layout_height="wrap_content"

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="Label">
+        <attr name="label_text" format="string"/>
+        <attr name="display_text" format="string"/>
+        <attr name="drawable" format="integer"/>
+        <attr name="label_position" format="enum">
+            <enum name="left" value="-1"/>
+            <enum name="center" value ="0"/>
+            <enum name="right" value="1"/>
+        </attr>
+        <attr name="display_position" format="enum">
+            <enum name="left" value="-1"/>
+            <enum name="center" value ="0"/>
+            <enum name="right" value="1"/>
+        </attr>
+    </declare-styleable>
+</resources>
