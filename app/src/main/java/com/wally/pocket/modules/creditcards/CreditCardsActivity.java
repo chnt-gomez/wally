@@ -23,12 +23,16 @@ import com.wally.pocket.R;
 import com.wally.pocket.dialogs.DialogBuilder;
 import com.wally.pocket.dialogs.RequiredDialogOps;
 import com.wally.pocket.model.CreditCard;
+import com.wally.pocket.model.ExpenseInCreditCard;
 import com.wally.pocket.modules.core.DataLoader;
 import com.wally.pocket.modules.core.RequiredPresenterOps;
 import com.wally.pocket.modules.core.RequiredViewOps;
 import com.wally.pocket.modules.core.WallyActivity;
 import com.wally.pocket.modules.core.WallyPresenter;
 import com.wally.pocket.util.AlarmReceiver;
+import com.wally.pocket.util.NFormatter;
+import com.wally.pocket.widgets.Label;
+
 import org.joda.time.DateTime;
 import java.util.List;
 
@@ -53,6 +57,18 @@ public class CreditCardsActivity extends WallyActivity implements RequiredViewOp
 
     @BindView(R.id.et_pay_day)
     EditText etPayDay;
+
+    @BindView(R.id.lb_current_debt)
+    Label lbCurrentDebt;
+
+    @BindView(R.id.lb_cut_day)
+    Label lbCutDay;
+
+    @BindView(R.id.lb_pay_day)
+    Label lbPayDay;
+
+    @BindView(R.id.lb_total_debt)
+    Label lbTotalDebt;
 
     private ViewAdapter viewAdapter;
 
@@ -140,11 +156,11 @@ public class CreditCardsActivity extends WallyActivity implements RequiredViewOp
         final CreditCardAdapter adapter = new CreditCardAdapter(getApplicationContext()
                 , R.layout.spn_spinner_item, viewAdapter.getCardList());
         spnCardList.setAdapter(adapter);
-        loadCard(0);
+        loadCard();
         spnCardList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                loadCard(position);
+                loadCard();
             }
 
             @Override
@@ -154,12 +170,12 @@ public class CreditCardsActivity extends WallyActivity implements RequiredViewOp
         });
     }
 
-    private void loadCard(int position) {
+    private void loadCard() {
         CreditCard card = (CreditCard) spnCardList.getSelectedItem();
         if (card != null) {
             etCreditCardName.setText(card.getCreditCardName());
-            etCutDay.setText(String.valueOf(card.getCutDay()));
-            etPayDay.setText(String.valueOf(card.getPayDay()));
+            lbTotalDebt.setDisplay(NFormatter.maskMoney(card.getTotalDebt()));
+            lbCurrentDebt.setDisplay(viewAdapter.getMonthPurchasesInCard(card.getId()));
         }
     }
 
@@ -199,9 +215,6 @@ public class CreditCardsActivity extends WallyActivity implements RequiredViewOp
         public View getDropDownView(int position, View convertView, ViewGroup parent) {
             TextView label = new TextView(getContext());
             label.setText(getItem(position).getCreditCardName());
-
-
-
             return label;
         }
 
@@ -215,13 +228,14 @@ public class CreditCardsActivity extends WallyActivity implements RequiredViewOp
 
     class ViewAdapter {
         private List<CreditCard> cardList;
-
         public List<CreditCard> getCardList() {
             return cardList;
         }
-
         public void setCardList(List<CreditCard> cardList) {
             this.cardList = cardList;
+        }
+        String getMonthPurchasesInCard(long cardId){
+            return NFormatter.maskMoney(presenter.getMonthDebtInCard(cardId));
         }
     }
 }

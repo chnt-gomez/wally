@@ -42,5 +42,6 @@ public interface RequiredPresenterOps {
         void updateCreditCard(long creditCardId, CreditCard creditCard);
         void addCreditCard(CreditCard card);
         void updateCreditCards();
+        long getMonthDebtInCard(long cardId);
     }
 }

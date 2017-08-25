@@ -280,4 +280,9 @@ public class WallyPresenter implements RequiredPresenterOps.RequiredBalancePrese
     public void updateCreditCards() {
 
     }
+
+    @Override
+    public long getMonthDebtInCard(long cardId) {
+
+    }
 }

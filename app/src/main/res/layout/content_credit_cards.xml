@@ -25,8 +25,32 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:label_position="center"
-        app:drawable="@drawable/ic_cash_multiple_grey600_18dp"
-        app:display_text="Test" />
+        android:id="@+id/lb_total_debt"
+        app:drawable="@drawable/ic_cash_multiple_grey600_18dp"/>
+
+    <com.wally.pocket.widgets.Label
+        android:id="@+id/lb_current_debt"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    app:label_position="center"
+    app:drawable="@drawable/ic_banking_spendings_18"/>
+
+    <com.wally.pocket.widgets.Label
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/lb_cut_day"
+        app:label_position="center"
+        app:drawable="@drawable/ic_calendar_18"/>
+
+    <com.wally.pocket.widgets.Label
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/lb_pay_day"
+        app:label_position="center"
+        app:drawable="@drawable/ic_calendar_18"/>
 
     <EditText
         android:layout_width="match_parent"

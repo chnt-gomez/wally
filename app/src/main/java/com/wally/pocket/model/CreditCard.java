@@ -28,6 +28,16 @@ public class CreditCard extends SugarRecord {
     private int payDay;
     private int cutDay;
 
+    public int getLatestMonthApplied() {
+        return latestMonthApplied;
+    }
+
+    public void setLatestMonthApplied(int latestMonthApplied) {
+        this.latestMonthApplied = latestMonthApplied;
+    }
+
+    private int latestMonthApplied;
+
     public int getPayStatus() {
         return payStatus;
     }
